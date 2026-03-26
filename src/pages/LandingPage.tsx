@@ -10,8 +10,30 @@ import {
   GlobeHemisphereWest,
   Quotes,
   Robot,
-  Target
+  Target,
+  ArrowRight as PhosphorArrowRight,
+  Database,
+  Code as PhosphorCode,
+  ChatCircleText,
+  MagnifyingGlass,
+  Gear,
+  SlackLogo,
+  DiscordLogo,
+  WhatsappLogo,
+  CaretDown,
+  Copy as PhosphorCopy,
+  Check as PhosphorCheck,
+  TrendUp,
+  UsersThree,
+  LockSimple,
+  X
 } from '@phosphor-icons/react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const BitBeetleLogo = () => (
   <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
@@ -29,9 +51,109 @@ const BitBeetleLogo = () => (
   </svg>
 );
 
+const BentoCard = ({ title, description, icon: Icon, className = "", children }: any) => (
+  <div
+    className={`glass p-8 flex flex-col h-full group ${className}`}
+    style={{ position: 'relative', overflow: 'hidden' }}
+  >
+    <div className="flex items-center gap-4 mb-4">
+      <div
+        className="h-10 w-10 rounded-lg flex items-center justify-center transition-transform group-hover:scale-110"
+        style={{ background: 'var(--color-accent-teal-dim)', color: 'var(--color-accent-teal)' }}
+      >
+        <Icon size={24} weight="duotone" />
+      </div>
+      <h3 className="text-xl font-bold" style={{ color: 'var(--color-text-primary)' }}>{title}</h3>
+    </div>
+    <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--color-text-secondary)' }}>
+      {description}
+    </p>
+    <div className="mt-auto">
+      {children}
+    </div>
+    <div
+      className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 rounded-full opacity-0 group-hover:opacity-10 transition-opacity"
+      style={{ background: 'var(--color-accent-teal)', filter: 'blur(40px)' }}
+    />
+  </div>
+);
+
+const IntegrationIcon = ({ icon: Icon, label }: any) => (
+  <div className="flex flex-col items-center gap-3 group cursor-pointer">
+    <div
+      className="h-16 w-16 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110 group-hover:-translate-y-1"
+      style={{ background: 'var(--color-bg-elevated)', border: '1px solid var(--color-border-subtle)' }}
+    >
+      <Icon size={32} weight="duotone" style={{ color: 'var(--color-text-secondary)' }} className="group-hover:text-accent-teal transition-colors" />
+    </div>
+    <span className="text-xs font-mono uppercase tracking-widest" style={{ color: 'var(--color-text-muted)' }}>{label}</span>
+  </div>
+);
+
+const InstallationCode = () => {
+  const [copied, setCopied] = React.useState(false);
+  const code = `<script 
+  src="https://bitbeetle.ai/widget.js" 
+  data-id="bb_94281" 
+  async
+></script>`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="relative group">
+      <div className="absolute -inset-1 bg-gradient-to-r from-accent-teal to-accent-cyan rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+      <div className="relative bg-zinc-950 rounded-xl overflow-hidden border border-white/10">
+        <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/5">
+          <div className="flex gap-1.5">
+            <div className="h-3 w-3 rounded-full bg-red-500/50" />
+            <div className="h-3 w-3 rounded-full bg-yellow-500/50" />
+            <div className="h-3 w-3 rounded-full bg-green-500/50" />
+          </div>
+          <div className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">HTML</div>
+          <button 
+            onClick={handleCopy}
+            className="text-zinc-500 hover:text-white transition-colors"
+          >
+            {copied ? <PhosphorCheck size={16} className="text-accent-green" /> : <PhosphorCopy size={16} />}
+          </button>
+        </div>
+        <div className="p-6 font-mono text-sm leading-relaxed">
+          <div className="flex gap-4">
+            <span className="text-zinc-700 select-none">1</span>
+            <span className="text-accent-teal">&lt;script</span>
+          </div>
+          <div className="flex gap-4">
+            <span className="text-zinc-700 select-none">2</span>
+            <span className="ml-4 text-zinc-400">src=</span>
+            <span className="text-accent-amber">"https://bitbeetle.ai/widget.js"</span>
+          </div>
+          <div className="flex gap-4">
+            <span className="text-zinc-700 select-none">3</span>
+            <span className="ml-4 text-zinc-400">data-id=</span>
+            <span className="text-accent-amber">"bb_94281"</span>
+          </div>
+          <div className="flex gap-4">
+            <span className="text-zinc-700 select-none">4</span>
+            <span className="ml-4 text-accent-teal">async</span>
+          </div>
+          <div className="flex gap-4">
+            <span className="text-zinc-700 select-none">5</span>
+            <span className="text-accent-teal">&gt;&lt;/script&gt;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function LandingPage() {
   const handleStart = () => {
-    window.location.href = '/dashboard';
+    blink.auth.login(window.location.origin + '/dashboard');
   };
 
   const fadeInUp = {
@@ -319,56 +441,302 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section
-        className="py-32"
-        id="features"
-        style={{ background: 'var(--color-bg-primary)' }}
-      >
+      {/* Features Grid - Bento Style */}
+      <section className="py-32" id="features" style={{ background: 'var(--color-bg-primary)' }}>
         <div className="container px-4 mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-24">
-            <h2
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               className="text-4xl lg:text-6xl font-bold mb-8 leading-tight"
-              style={{ color: 'var(--color-text-primary)' }}
-            >Everything you need for <span style={{ color: 'var(--color-text-muted)', fontStyle: 'italic', fontWeight: 400 }}>elite support.</span></h2>
-            <p className="text-xl" style={{ color: 'var(--color-text-secondary)' }}>Powerful tools designed to help you scale your operations while improving customer satisfaction.</p>
+              style={{ color: 'var(--color-text-primary)', fontFamily: 'var(--font-display)' }}
+            >
+              Support that scales <br />
+              <span className="italic font-normal text-gradient">without the overhead.</span>
+            </motion.h2>
+            <p className="text-xl leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+              Powerful tools designed to help you scale your operations while improving customer satisfaction.
+            </p>
           </div>
 
-          <div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px rounded-3xl overflow-hidden shadow-2xl"
-            style={{ background: 'var(--color-border-subtle)', border: '1px solid var(--color-border-subtle)' }}
-          >
-            <FeatureCard
-              icon={<Lightning className="h-6 w-6" />}
-              title="Instant Training"
-              description="Upload your documentation and have a fully-trained AI expert ready to chat in under 60 seconds."
-            />
-            <FeatureCard
-              icon={<Robot className="h-6 w-6" />}
-              title="Advanced RAG Engine"
-              description="Uses Hybrid Search and Semantic Re-ranking to ensure every answer is grounded in your facts."
-            />
-            <FeatureCard
-              icon={<GlobeHemisphereWest className="h-6 w-6" />}
-              title="Multilingual Support"
-              description="Automatically detects and responds in 50+ languages, allowing you to serve a global audience."
-            />
-            <FeatureCard
-              icon={<ChartLineUp className="h-6 w-6" />}
-              title="Actionable Analytics"
-              description="Identify knowledge gaps and track resolution rates with deep conversation insights."
-            />
-            <FeatureCard
-              icon={<ShieldCheck className="h-6 w-6" />}
-              title="Enterprise Security"
-              description="SOC2 compliant infrastructure with advanced PII masking and data encryption at rest."
-            />
-            <FeatureCard
-              icon={<Target className="h-6 w-6" />}
-              title="Intent Detection"
-              description="Smart routing that identifies when a query needs human intervention and escalates seamlessly."
-            />
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-6 lg:h-[800px]">
+            <BentoCard
+              className="md:col-span-3 lg:col-span-4"
+              title="Knowledge Graph Indexing"
+              description="We don't just store text. We build a semantic knowledge graph from your documentation, allowing the AI to understand relationships between concepts."
+              icon={Database}
+            >
+              <div className="relative h-48 bg-black/40 rounded-xl border border-white/5 overflow-hidden flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center opacity-20">
+                  <div className="w-[300px] h-[300px] border border-accent-teal/20 rounded-full animate-ping" />
+                  <div className="w-[200px] h-[200px] border border-accent-teal/20 rounded-full" />
+                </div>
+                <div className="grid grid-cols-4 gap-4 p-4">
+                  {[...Array(8)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      animate={{ opacity: [0.3, 1, 0.3] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+                      className="h-8 w-8 rounded-md"
+                      style={{ background: 'var(--color-accent-teal-dim)', border: '1px solid var(--color-border-glow)' }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </BentoCard>
+
+            <BentoCard
+              className="md:col-span-3 lg:col-span-2"
+              title="Global by Default"
+              description="Communicate with customers in 100+ languages. Automatic detection and translation ensure your message is never lost."
+              icon={GlobeHemisphereWest}
+            >
+              <div className="flex flex-wrap gap-2">
+                {['English', 'Spanish', 'French', 'German', 'Japanese', 'Chinese', 'Hindi', 'Arabic'].map(lang => (
+                  <span key={lang} className="badge-teal text-[10px]">{lang}</span>
+                ))}
+              </div>
+            </BentoCard>
+
+            <BentoCard
+              className="md:col-span-2"
+              title="Real-time Analytics"
+              description="Identify knowledge gaps instantly with deep-dive analytics into every conversation."
+              icon={ChartLineUp}
+            >
+              <div className="h-32 flex items-end gap-1">
+                {[40, 70, 45, 90, 65, 80, 50, 100].map((h, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ height: 0 }}
+                    whileInView={{ height: `${h}%` }}
+                    className="flex-1 rounded-t-sm"
+                    style={{ background: i === 7 ? 'var(--color-accent-cyan)' : 'var(--color-accent-teal-dim)' }}
+                  />
+                ))}
+              </div>
+            </BentoCard>
+
+            <BentoCard
+              className="md:col-span-2"
+              title="Smart Escalation"
+              description="Automatically detects when a user is frustrated or needs human help and routes them to your team."
+              icon={Target}
+            >
+              <div className="flex items-center justify-center h-24">
+                <div className="h-16 w-16 rounded-full border-2 border-dashed border-accent-teal/30 flex items-center justify-center animate-spin-slow">
+                  <Target size={24} className="text-accent-teal" />
+                </div>
+              </div>
+            </BentoCard>
+
+            <BentoCard
+              className="md:col-span-2"
+              title="Custom Widget Styling"
+              description="Make the chatbot feel like a native part of your application with complete CSS control."
+              icon={Gear}
+            >
+              <div className="flex gap-2">
+                <div className="h-6 w-6 rounded-full bg-accent-teal shadow-lg shadow-accent-teal/20" />
+                <div className="h-6 w-6 rounded-full bg-accent-cyan" />
+                <div className="h-6 w-6 rounded-full bg-accent-amber" />
+                <div className="h-6 w-6 rounded-full bg-accent-green" />
+              </div>
+            </BentoCard>
           </div>
+        </div>
+      </section>
+
+      {/* Live Demo Visual Section */}
+      <section className="py-32 overflow-hidden border-y border-white/5" style={{ background: 'var(--color-bg-elevated)' }}>
+        <div className="container px-4 mx-auto">
+          <div className="flex flex-col lg:flex-row gap-20 items-center">
+            <div className="lg:w-1/2">
+              <h2
+                className="text-4xl lg:text-6xl font-bold mb-8 leading-tight font-serif"
+                style={{ color: 'var(--color-text-primary)' }}
+              >The bot that <br /><span className="text-gradient">actually knows</span> your business.</h2>
+              <p
+                className="text-xl leading-relaxed mb-8"
+                style={{ color: 'var(--color-text-secondary)' }}
+              >
+                Stop using generic chatbots. BitBeetle deeply understands your unique documentation, providing answers that are always accurate and contextually relevant.
+              </p>
+              <div className="space-y-4">
+                {[
+                  "Semantic understanding of complex docs",
+                  "Source-backed answers with citations",
+                  "Continuous learning from feedback",
+                  "Multimodal support (Text, Images, Code)"
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <div className="h-5 w-5 rounded-full flex items-center justify-center" style={{ background: 'var(--color-accent-teal-dim)' }}>
+                      <CheckCircle2 size={12} style={{ color: 'var(--color-accent-teal)' }} />
+                    </div>
+                    <span style={{ color: 'var(--color-text-primary)' }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:w-1/2 w-full max-w-xl">
+              <div className="glass p-6 min-h-[400px] flex flex-col gap-6 shadow-glow-teal">
+                <div className="flex items-center justify-between pb-4 border-b border-white/5">
+                  <div className="flex items-center gap-3">
+                    <div className="h-8 w-8 rounded-full bg-accent-teal/20 flex items-center justify-center">
+                      <Robot size={18} className="text-accent-teal" />
+                    </div>
+                    <span className="font-bold text-sm">BitBeetle Assistant</span>
+                  </div>
+                  <div className="flex gap-1.5">
+                    <div className="h-2 w-2 rounded-full bg-zinc-700" />
+                    <div className="h-2 w-2 rounded-full bg-zinc-700" />
+                    <div className="h-2 w-2 rounded-full bg-zinc-700" />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="p-3 rounded-2xl rounded-bl-none text-sm max-w-[80%]"
+                    style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--color-text-primary)' }}
+                  >
+                    Hi there! How do I set up custom domain for my widget?
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 1.5 }}
+                    className="p-3 rounded-2xl rounded-br-none text-sm max-w-[80%] self-end"
+                    style={{ background: 'var(--color-accent-teal-dim)', color: 'var(--color-text-primary)', border: '1px solid rgba(23,195,206,0.2)' }}
+                  >
+                    <p className="mb-2 text-xs font-mono uppercase tracking-widest text-accent-teal opacity-70">Source: Settings Guide</p>
+                    You can set up a custom domain in the "Installation" tab. Simply enter your subdomain (e.g., support.yoursite.com) and add the CNAME record to your DNS provider.
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 2.5 }}
+                    className="flex justify-center mt-4"
+                  >
+                    <div className="badge-green">Confidence: 98.4%</div>
+                  </motion.div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Integration Ecosystem Section */}
+      <section className="py-32 bg-white/0">
+        <div className="container px-4 mx-auto text-center">
+          <h2
+            className="text-3xl lg:text-5xl font-bold mb-16 leading-tight font-serif"
+            style={{ color: 'var(--color-text-primary)' }}
+          >Fits into your <span className="italic font-normal text-zinc-500">workflow.</span></h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 max-w-5xl mx-auto">
+            <IntegrationIcon icon={SlackLogo} label="Slack" />
+            <IntegrationIcon icon={DiscordLogo} label="Discord" />
+            <IntegrationIcon icon={WhatsappLogo} label="WhatsApp" />
+            <IntegrationIcon icon={Database} label="Postgres" />
+            <IntegrationIcon icon={Globe} label="Shopify" />
+            <IntegrationIcon icon={Robot} label="Zendesk" />
+          </div>
+        </div>
+      </section>
+
+      {/* Installation Snippet Section */}
+      <section className="py-32 overflow-hidden" style={{ background: 'var(--color-bg-primary)' }}>
+        <div className="container px-4 mx-auto">
+          <div className="flex flex-col lg:flex-row gap-20 items-center">
+            <div className="lg:w-1/2">
+              <h2 
+                className="text-4xl lg:text-6xl font-bold mb-8 leading-tight font-serif"
+                style={{ color: 'var(--color-text-primary)' }}
+              >Go live in <span className="text-gradient">seconds.</span></h2>
+              <p className="text-xl leading-relaxed mb-8" style={{ color: 'var(--color-text-secondary)' }}>
+                Integration is as simple as adding a single script tag to your site. Works with any framework, from React to WordPress.
+              </p>
+              
+              <div className="space-y-6">
+                {[
+                  { title: "Universal Compatibility", desc: "Works with React, Next.js, Vue, Webflow, and static HTML." },
+                  { title: "Blazing Fast Load", desc: "Our widget is ultra-lightweight and asynchronously loaded to ensure zero impact on your SEO." },
+                  { title: "Auto-Versioning", desc: "Your widget always stays up to date with the latest AI improvements automatically." }
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-4">
+                    <div className="h-6 w-6 rounded-full flex items-center justify-center shrink-0 mt-1" style={{ background: 'var(--color-accent-teal-dim)' }}>
+                      <Lightning size={12} weight="fill" style={{ color: 'var(--color-accent-teal)' }} />
+                    </div>
+                    <div>
+                      <h4 className="font-bold mb-1" style={{ color: 'var(--color-text-primary)' }}>{item.title}</h4>
+                      <p className="text-sm text-zinc-500 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="lg:w-1/2 w-full max-w-2xl">
+              <InstallationCode />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-32" id="faq" style={{ background: 'var(--color-bg-primary)' }}>
+        <div className="container px-4 mx-auto max-w-4xl">
+          <div className="text-center mb-20">
+            <h2
+              className="text-4xl lg:text-6xl font-bold mb-8 font-serif"
+              style={{ color: 'var(--color-text-primary)' }}
+            >Got <span className="italic font-normal text-gradient">questions?</span></h2>
+            <p className="text-xl" style={{ color: 'var(--color-text-secondary)' }}>Everything you need to know about BitBeetle.</p>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            <AccordionItem value="item-1" className="glass px-6 border-white/5">
+              <AccordionTrigger className="text-left py-6 hover:no-underline font-bold text-lg" style={{ color: 'var(--color-text-primary)' }}>
+                How accurate is the AI's response?
+              </AccordionTrigger>
+              <AccordionContent className="pb-6 text-zinc-400 leading-relaxed">
+                BitBeetle uses a specialized RAG (Retrieval-Augmented Generation) pipeline that forces the AI to only use the information provided in your documents. If the answer isn't in your docs, the bot is instructed to politely say so rather than guessing.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-2" className="glass px-6 border-white/5">
+              <AccordionTrigger className="text-left py-6 hover:no-underline font-bold text-lg" style={{ color: 'var(--color-text-primary)' }}>
+                What file formats do you support?
+              </AccordionTrigger>
+              <AccordionContent className="pb-6 text-zinc-400 leading-relaxed">
+                We currently support PDF, CSV, TXT, and Markdown files. You can also provide URLs to your public documentation pages or sync directly from Notion and Google Drive.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-3" className="glass px-6 border-white/5">
+              <AccordionTrigger className="text-left py-6 hover:no-underline font-bold text-lg" style={{ color: 'var(--color-text-primary)' }}>
+                Is my data used to train other models?
+              </AccordionTrigger>
+              <AccordionContent className="pb-6 text-zinc-400 leading-relaxed">
+                Absolutely not. Your data is isolated to your specific vector index and is never used to train public LLMs or other customers' bots. We prioritize data privacy and are working towards SOC2 compliance.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-4" className="glass px-6 border-white/5">
+              <AccordionTrigger className="text-left py-6 hover:no-underline font-bold text-lg" style={{ color: 'var(--color-text-primary)' }}>
+                Can I customize the look of the widget?
+              </AccordionTrigger>
+              <AccordionContent className="pb-6 text-zinc-400 leading-relaxed">
+                Yes! You have full control over the widget's primary color, greeting message, bot name, and avatar. For Enterprise customers, we offer complete white-labeling and custom CSS injection.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </section>
 
@@ -449,6 +817,85 @@ export default function LandingPage() {
                   <CheckCircle2 className="h-4 w-4" style={{ color: 'var(--color-text-muted)' }} /> Verified G2 Review
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Section */}
+      <section className="py-32 bg-white/0">
+        <div className="container px-4 mx-auto">
+          <div className="text-center max-w-2xl mx-auto mb-20">
+            <h2 className="text-3xl lg:text-5xl font-bold mb-6 font-serif" style={{ color: 'var(--color-text-primary)' }}>Standard Bot vs. <span className="text-gradient">BitBeetle</span></h2>
+            <p className="text-lg text-zinc-500">Why thousands of businesses are switching to context-aware support.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5 border border-white/5 rounded-3xl overflow-hidden shadow-2xl">
+            <div className="p-12 bg-zinc-950/20">
+              <h3 className="text-xl font-bold mb-8 text-zinc-500 uppercase tracking-widest text-sm">Legacy Chatbots</h3>
+              <ul className="space-y-6">
+                {[
+                  "Keyword-based keyword matching",
+                  "Constant 'hallucinations' and guessing",
+                  "Disconnected from your actual data",
+                  "Frustrating 'I don't understand' loops",
+                  "Static, pre-programmed flows"
+                ].map((item, i) => (
+                  <li key={i} className="flex gap-3 text-zinc-600">
+                    <X className="h-5 w-5 shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="p-12 bg-accent-teal/5 border-l border-white/5 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4">
+                <div className="badge-teal">Recommended</div>
+              </div>
+              <h3 className="text-xl font-bold mb-8 text-accent-teal uppercase tracking-widest text-sm">BitBeetle AI</h3>
+              <ul className="space-y-6">
+                {[
+                  "Deep semantic documentation analysis",
+                  "Fact-grounded, citation-backed answers",
+                  "Native sync with your knowledge base",
+                  "Human-like reasoning and empathy",
+                  "Learns and improves with every chat"
+                ].map((item, i) => (
+                  <li key={i} className="flex gap-3 text-zinc-200 font-medium">
+                    <CheckCircle2 className="h-5 w-5 shrink-0 text-accent-teal" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Enterprise Specs Section */}
+      <section className="py-32 border-y border-white/5" style={{ background: 'var(--color-bg-elevated)' }}>
+        <div className="container px-4 mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+            <div className="text-center md:text-left">
+              <div className="h-12 w-12 rounded-xl bg-accent-teal/10 flex items-center justify-center mb-6 mx-auto md:mx-0">
+                <TrendUp size={24} className="text-accent-teal" />
+              </div>
+              <h4 className="text-lg font-bold mb-2 text-white">99.9% Uptime</h4>
+              <p className="text-sm text-zinc-500 leading-relaxed">Enterprise-grade infrastructure ensures your support is never offline.</p>
+            </div>
+            <div className="text-center md:text-left">
+              <div className="h-12 w-12 rounded-xl bg-accent-cyan/10 flex items-center justify-center mb-6 mx-auto md:mx-0">
+                <LockSimple size={24} className="text-accent-cyan" />
+              </div>
+              <h4 className="text-lg font-bold mb-2 text-white">AES-256 Encryption</h4>
+              <p className="text-sm text-zinc-500 leading-relaxed">Your data is encrypted at rest and in transit with the highest standards.</p>
+            </div>
+            <div className="text-center md:text-left">
+              <div className="h-12 w-12 rounded-xl bg-accent-amber/10 flex items-center justify-center mb-6 mx-auto md:mx-0">
+                <UsersThree size={24} className="text-accent-amber" />
+              </div>
+              <h4 className="text-lg font-bold mb-2 text-white">Team Collaboration</h4>
+              <p className="text-sm text-zinc-500 leading-relaxed">Share access, manage permissions, and collaborate across departments.</p>
             </div>
           </div>
         </div>
