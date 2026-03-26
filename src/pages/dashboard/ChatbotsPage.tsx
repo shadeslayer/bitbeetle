@@ -37,11 +37,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { blink } from '@/lib/blink';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 // MVP bypass: hardcoded user until auth is implemented
 const MVP_USER_ID = 'demo';
-import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
 
 export default function ChatbotsPage() {
   const [chatbots, setChatbots] = useState<any[]>([]);
