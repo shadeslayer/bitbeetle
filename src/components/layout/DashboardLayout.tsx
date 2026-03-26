@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { 
-  Bot, 
-  BarChart3, 
-  Settings, 
-  CreditCard, 
-  LogOut, 
-  Menu, 
+import {
+  BarChart3,
+  Settings,
+  CreditCard,
+  LogOut,
+  Menu,
   X,
   ChevronRight,
   MessageSquare,
@@ -44,8 +43,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-zinc-950"></div>
+      <div className="h-screen flex items-center justify-center" style={{ background: 'var(--color-bg-primary)' }}>
+        <div
+          className="animate-spin rounded-full h-8 w-8 border-2"
+          style={{ borderColor: 'transparent', borderTopColor: 'var(--color-accent-teal)' }}
+        ></div>
       </div>
     );
   }
@@ -53,23 +55,54 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   if (!user) return null;
 
   const navItems = [
-    { icon: <Bot size={20} />, label: 'Chatbots', path: '/dashboard' },
+    {
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+          <ellipse cx="14" cy="16" rx="9" ry="10" fill="var(--color-accent-teal)" opacity="0.9"/>
+          <ellipse cx="14" cy="15" rx="6" ry="7" fill="var(--color-bg-primary)"/>
+          <circle cx="14" cy="13" r="3" fill="var(--color-accent-cyan)"/>
+          <line x1="10" y1="7" x2="7" y2="2" stroke="var(--color-accent-teal)" strokeWidth="1.5" strokeLinecap="round"/>
+          <line x1="18" y1="7" x2="21" y2="2" stroke="var(--color-accent-teal)" strokeWidth="1.5" strokeLinecap="round"/>
+          <line x1="5"  y1="13" x2="1"  y2="11" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+          <line x1="5"  y1="16" x2="1"  y2="16" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+          <line x1="5"  y1="19" x2="1"  y2="21" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+          <line x1="23" y1="13" x2="27" y2="11" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+          <line x1="23" y1="16" x2="27" y2="16" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+          <line x1="23" y1="19" x2="27" y2="21" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+        </svg>
+      ),
+      label: 'Chatbots',
+      path: '/dashboard',
+    },
     { icon: <BarChart3 size={20} />, label: 'Analytics', path: '/dashboard/analytics' },
     { icon: <CreditCard size={20} />, label: 'Billing', path: '/dashboard/billing' },
     { icon: <Settings size={20} />, label: 'Settings', path: '/dashboard/settings' },
   ];
 
   return (
-    <div className="flex h-screen bg-zinc-50 overflow-hidden">
+    <div className="flex h-screen overflow-hidden" style={{ background: 'var(--color-bg-primary)' }}>
       {/* Sidebar */}
-      <aside 
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-zinc-200 transition-transform duration-300 transform lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-[220px] transition-transform duration-300 transform lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        style={{ background: 'var(--color-bg-elevated)', borderRight: '1px solid var(--color-border-subtle)' }}
       >
         <div className="flex flex-col h-full">
-          <div className="h-16 flex items-center px-6 border-b border-zinc-100">
+          <div className="h-16 flex items-center px-6" style={{ borderBottom: '1px solid var(--color-border-subtle)' }}>
             <a href="/" className="flex items-center gap-2">
-              <Bot className="h-7 w-7 text-zinc-950" />
-              <span className="text-lg font-bold tracking-tighter text-zinc-950">BotSupport</span>
+              <svg width="24" height="24" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+                <ellipse cx="14" cy="16" rx="9" ry="10" fill="var(--color-accent-teal)" opacity="0.9"/>
+                <ellipse cx="14" cy="15" rx="6" ry="7" fill="var(--color-bg-primary)"/>
+                <circle cx="14" cy="13" r="3" fill="var(--color-accent-cyan)"/>
+                <line x1="10" y1="7" x2="7" y2="2" stroke="var(--color-accent-teal)" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="18" y1="7" x2="21" y2="2" stroke="var(--color-accent-teal)" strokeWidth="1.5" strokeLinecap="round"/>
+                <line x1="5"  y1="13" x2="1"  y2="11" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+                <line x1="5"  y1="16" x2="1"  y2="16" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+                <line x1="5"  y1="19" x2="1"  y2="21" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+                <line x1="23" y1="13" x2="27" y2="11" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+                <line x1="23" y1="16" x2="27" y2="16" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+                <line x1="23" y1="19" x2="27" y2="21" stroke="var(--color-accent-teal)" strokeWidth="1.2" strokeLinecap="round"/>
+              </svg>
+              <span className="text-lg font-bold tracking-tighter" style={{ color: 'var(--color-text-primary)' }}>BitBeetle</span>
             </a>
           </div>
 
@@ -79,12 +112,20 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 key={item.path}
                 to={item.path}
                 end={item.path === '/dashboard'}
-                className={({ isActive }) => 
-                  `flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    isActive 
-                      ? 'bg-zinc-100 text-zinc-950' 
-                      : 'text-zinc-500 hover:text-zinc-950 hover:bg-zinc-50'
-                  }`
+                className={({ isActive }) =>
+                  isActive
+                    ? 'flex items-center gap-3 py-2 text-sm font-medium transition-colors'
+                    : 'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors hover:bg-[rgba(23,195,206,0.06)]'
+                }
+                style={({ isActive }) =>
+                  isActive
+                    ? {
+                        borderLeft: '3px solid var(--color-accent-teal)',
+                        background: 'var(--color-accent-teal-dim)',
+                        color: 'var(--color-accent-teal)',
+                        paddingLeft: 'calc(0.75rem - 3px)',
+                      }
+                    : { color: 'var(--color-text-secondary)' }
                 }
               >
                 {item.icon}
@@ -93,17 +134,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             ))}
           </nav>
 
-          <div className="p-4 border-t border-zinc-100 space-y-1">
-            <a 
-              href="#" 
-              className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-zinc-500 rounded-lg hover:text-zinc-950 hover:bg-zinc-50 transition-colors"
+          <div className="p-4 space-y-1" style={{ borderTop: '1px solid var(--color-border-subtle)' }}>
+            <a
+              href="#"
+              className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors hover:bg-[rgba(255,255,255,0.04)]"
+              style={{ color: 'var(--color-text-secondary)' }}
             >
               <LifeBuoy size={20} />
               Help & Support
             </a>
-            <button 
+            <button
               onClick={() => blink.auth.signOut()}
-              className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium text-red-500 rounded-lg hover:bg-red-50 transition-colors"
+              className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium rounded-lg transition-colors hover:bg-[rgba(248,113,113,0.08)]"
+              style={{ color: 'var(--color-accent-error)' }}
             >
               <LogOut size={20} />
               Sign Out
@@ -113,12 +156,19 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header className="h-16 flex items-center justify-between px-6 bg-white border-b border-zinc-200 lg:hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden" style={{ background: 'var(--color-bg-primary)' }}>
+        <header
+          className="flex items-center justify-between px-6 lg:hidden"
+          style={{
+            background: 'var(--color-bg-primary)',
+            borderBottom: '1px solid var(--color-border-subtle)',
+            height: '60px',
+          }}
+        >
           <button onClick={() => setSidebarOpen(true)}>
-            <Menu className="h-6 w-6 text-zinc-500" />
+            <Menu className="h-6 w-6" style={{ color: 'var(--color-text-secondary)' }} />
           </button>
-          <span className="font-bold">BotSupport</span>
+          <span className="font-bold" style={{ color: 'var(--color-text-primary)' }}>BitBeetle</span>
           <div className="w-6"></div>
         </header>
 
@@ -129,8 +179,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* Mobile Overlay */}
       {isMobile && sidebarOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-zinc-950/20 backdrop-blur-sm"
+        <div
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
         ></div>
       )}

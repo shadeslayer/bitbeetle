@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { blink } from '@/lib/blink';
 import { toast } from 'sonner';
+import { generateSupportReply } from '@/lib/openrouter';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -23,10 +24,16 @@ export default function WidgetPage() {
   const [showSatisfaction, setShowSatisfaction] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const [aiDraft, setAiDraft] = useState<string | null>(null);
+  const [aiDraftLoading, setAiDraftLoading] = useState(false);
+  const [aiDraftError, setAiDraftError] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
   useEffect(() => {
     if (widgetId) {
       fetchBotByWidgetId();
     }
+    return () => { abortRef.current?.abort(); };
   }, [widgetId]);
 
   useEffect(() => {
@@ -44,7 +51,7 @@ export default function WidgetPage() {
           ...botData,
           settings: botData.settings ? JSON.parse(botData.settings) : {}
         });
-        
+
         // Initial greeting
         setMessages([{
           role: 'assistant',
@@ -91,6 +98,26 @@ export default function WidgetPage() {
         content: userMessage
       });
 
+      // Fire OpenRouter draft (non-blocking)
+      abortRef.current?.abort();
+      abortRef.current = new AbortController();
+      setAiDraft(null);
+      setAiDraftError(null);
+      setAiDraftLoading(true);
+      generateSupportReply(
+        messages.map(m => ({ role: m.role as 'user' | 'assistant', content: m.content })),
+        bot.settings?.botName || bot.name || 'Support',
+        abortRef.current.signal
+      ).then(draft => {
+        setAiDraft(draft);
+      }).catch(err => {
+        if (err.name !== 'AbortError') {
+          setAiDraftError(err.message);
+        }
+      }).finally(() => {
+        setAiDraftLoading(false);
+      });
+
       // 3. Get AI response using RAG if available
       let aiResponse = '';
       if (bot.rag_collection_id) {
@@ -117,7 +144,7 @@ export default function WidgetPage() {
       });
 
       setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
-      
+
       // Show satisfaction after 3 messages
       if (messages.length > 2 && !showSatisfaction) {
         setShowSatisfaction(true);
@@ -145,14 +172,25 @@ export default function WidgetPage() {
   };
 
   if (loading) return null;
-  if (!bot) return <div className="p-4 text-center text-zinc-400 text-sm">Bot not found</div>;
+  if (!bot) return (
+    <div className="p-4 text-center text-sm" style={{ color: 'var(--color-text-muted)' }}>
+      Bot not found
+    </div>
+  );
 
   const themeColor = bot.settings.primaryColor || '#18181b';
 
   return (
-    <div className="flex flex-col h-screen bg-white font-sans border border-zinc-200">
+    <div
+      className="flex flex-col h-screen font-sans"
+      style={{
+        background: 'var(--color-bg-elevated)',
+        border: '1px solid var(--color-border-subtle)',
+        fontFamily: 'var(--font-display)',
+      }}
+    >
       {/* Header */}
-      <div 
+      <div
         className="px-4 py-4 flex items-center justify-between text-white shadow-sm"
         style={{ backgroundColor: themeColor }}
       >
@@ -174,42 +212,103 @@ export default function WidgetPage() {
       </div>
 
       {/* Messages Area */}
-      <div 
+      <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 space-y-4 bg-zinc-50/50"
+        className="flex-1 overflow-y-auto p-4 space-y-4"
+        style={{ background: 'var(--color-bg-primary)' }}
       >
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
-              msg.role === 'user' 
-                ? 'bg-zinc-950 text-white rounded-tr-none' 
-                : 'bg-white text-zinc-900 border border-zinc-200 rounded-tl-none shadow-sm'
-            }`}>
+            <div
+              className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                msg.role === 'user' ? 'rounded-tr-none' : 'rounded-tl-none'
+              }`}
+              style={
+                msg.role === 'user'
+                  ? { background: 'var(--color-accent-teal)', color: '#0A1628' }
+                  : {
+                      background: 'var(--color-bg-elevated)',
+                      color: 'var(--color-text-primary)',
+                      border: '1px solid var(--color-border-subtle)',
+                    }
+              }
+            >
               {msg.content}
             </div>
           </div>
         ))}
+
+        {(aiDraftLoading || aiDraft || aiDraftError) && (
+          <div className="flex justify-start">
+            <div className="ai-draft-bubble">
+              <div className="ai-draft-label">
+                AI DRAFT
+                {aiDraft && (
+                  <div className="confidence-bar">
+                    <div className="confidence-fill" />
+                  </div>
+                )}
+              </div>
+              {aiDraftLoading && (
+                <div className="draft-dots">
+                  <span className="dot" style={{ animationDelay: '0s' }} />
+                  <span className="dot" style={{ animationDelay: '0.2s' }} />
+                  <span className="dot" style={{ animationDelay: '0.4s' }} />
+                </div>
+              )}
+              {aiDraft && <p>{aiDraft}</p>}
+              {aiDraftError && (
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--color-accent-error)', margin: 0 }}>
+                  {aiDraftError}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
         {isTyping && (
           <div className="flex justify-start">
-            <div className="bg-white border border-zinc-200 px-4 py-2 rounded-2xl rounded-tl-none shadow-sm">
-              <div className="flex gap-1">
-                <span className="h-1.5 w-1.5 bg-zinc-400 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                <span className="h-1.5 w-1.5 bg-zinc-400 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                <span className="h-1.5 w-1.5 bg-zinc-400 rounded-full animate-bounce"></span>
+            <div
+              className="px-4 py-2 rounded-2xl rounded-tl-none"
+              style={{
+                background: 'var(--color-bg-elevated)',
+                border: '1px solid var(--color-border-subtle)',
+              }}
+            >
+              <div className="draft-dots" style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
+                <span className="dot" style={{ animationDelay: '0s' }} />
+                <span className="dot" style={{ animationDelay: '0.2s' }} />
+                <span className="dot" style={{ animationDelay: '0.4s' }} />
               </div>
             </div>
           </div>
         )}
 
         {showSatisfaction && (
-          <div className="flex flex-col items-center gap-3 p-4 bg-white border border-zinc-100 rounded-2xl shadow-sm text-center animate-fade-in">
-            <p className="text-xs font-bold text-zinc-900 uppercase tracking-widest">Rate this conversation</p>
+          <div
+            className="flex flex-col items-center gap-3 p-4 rounded-2xl text-center animate-fade-in"
+            style={{
+              background: 'var(--color-bg-elevated)',
+              border: '1px solid var(--color-border-subtle)',
+            }}
+          >
+            <p
+              className="text-xs font-bold uppercase tracking-widest"
+              style={{ color: 'var(--color-text-primary)' }}
+            >
+              Rate this conversation
+            </p>
             <div className="flex gap-2">
               {[1, 2, 3, 4, 5].map((rating) => (
-                <button 
+                <button
                   key={rating}
                   onClick={() => handleSatisfaction(rating)}
-                  className="h-8 w-8 rounded-full border border-zinc-200 flex items-center justify-center hover:bg-zinc-50 hover:border-zinc-400 transition-all text-zinc-600 hover:text-zinc-950"
+                  className="h-8 w-8 rounded-full flex items-center justify-center transition-all"
+                  style={{
+                    background: 'var(--color-bg-glass)',
+                    border: '1px solid var(--color-border-subtle)',
+                    color: 'var(--color-text-secondary)',
+                  }}
                 >
                   {rating}
                 </button>
@@ -220,17 +319,28 @@ export default function WidgetPage() {
       </div>
 
       {/* Input Area */}
-      <div className="p-4 bg-white border-t border-zinc-100">
+      <div
+        className="p-4"
+        style={{
+          background: 'var(--color-bg-elevated)',
+          borderTop: '1px solid var(--color-border-subtle)',
+        }}
+      >
         <div className="relative flex items-center">
-          <Input 
+          <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Type your message..."
-            className="pr-12 py-6 rounded-2xl border-zinc-200 focus:ring-zinc-950 bg-zinc-50/50"
+            className="pr-12 py-6 rounded-2xl"
+            style={{
+              background: 'var(--color-bg-glass)',
+              borderColor: 'var(--color-border-subtle)',
+              color: 'var(--color-text-primary)',
+            }}
           />
-          <Button 
-            size="icon" 
+          <Button
+            size="icon"
             className="absolute right-2 rounded-xl"
             style={{ backgroundColor: themeColor }}
             onClick={handleSend}
@@ -239,8 +349,11 @@ export default function WidgetPage() {
             <Send size={18} />
           </Button>
         </div>
-        <p className="text-[10px] text-zinc-400 text-center mt-3 uppercase tracking-widest font-bold">
-          Powered by <span className="text-zinc-900">BotSupport</span>
+        <p
+          className="text-[10px] text-center mt-3 uppercase tracking-widest font-bold"
+          style={{ color: 'var(--color-text-muted)' }}
+        >
+          Powered by <span style={{ color: 'var(--color-text-secondary)' }}>BitBeetle</span>
         </p>
       </div>
     </div>
