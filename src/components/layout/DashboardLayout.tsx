@@ -1,58 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import {
   BarChart3,
   Settings,
   CreditCard,
   LogOut,
   Menu,
-  X,
-  ChevronRight,
-  MessageSquare,
   LifeBuoy
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { blink } from '@/lib/blink';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+// MVP bypass: auth is disabled. Replace with real auth when ready.
+const MVP_USER = { id: 'demo', email: 'demo@bitbeetle.app' };
+
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const isMobile = useIsMobile();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    return blink.auth.onAuthStateChanged(({ user, isLoading }) => {
-      setUser(user);
-      setLoading(isLoading);
-      if (!isLoading && !user) {
-        navigate('/');
-      }
-    });
-  }, [navigate]);
 
   useEffect(() => {
     if (isMobile) setSidebarOpen(false);
     else setSidebarOpen(true);
   }, [isMobile]);
-
-  if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center" style={{ background: 'var(--color-bg-primary)' }}>
-        <div
-          className="animate-spin rounded-full h-8 w-8 border-2"
-          style={{ borderColor: 'transparent', borderTopColor: 'var(--color-accent-teal)' }}
-        ></div>
-      </div>
-    );
-  }
-
-  if (!user) return null;
 
   const navItems = [
     {
@@ -144,7 +116,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               Help & Support
             </a>
             <button
-              onClick={() => blink.auth.signOut()}
+              onClick={() => window.location.href = '/'}
               className="flex items-center gap-3 w-full px-3 py-2 text-sm font-medium rounded-lg transition-colors hover:bg-[rgba(248,113,113,0.08)]"
               style={{ color: 'var(--color-accent-error)' }}
             >

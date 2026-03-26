@@ -31,7 +31,7 @@ const BitBeetleLogo = () => (
 
 export default function LandingPage() {
   const handleStart = () => {
-    blink.auth.login(window.location.origin + '/dashboard');
+    window.location.href = '/dashboard';
   };
 
   const fadeInUp = {

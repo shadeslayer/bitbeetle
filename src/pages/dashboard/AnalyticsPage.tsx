@@ -3,6 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { BarChart3, TrendingUp, Users, MessageSquare, Star, Zap } from 'lucide-react';
 import { blink } from '@/lib/blink';
 
+// MVP bypass: hardcoded user until auth is implemented
+const MVP_USER_ID = 'demo';
+
 export default function AnalyticsPage() {
   const [stats, setStats] = useState({
     conversations: 0,
@@ -18,12 +21,12 @@ export default function AnalyticsPage() {
 
   const fetchAnalytics = async () => {
     try {
-      const user = await blink.auth.me();
-      if (!user) return;
+      const user = await blink.auth.me().catch(() => null);
+      const userId = user?.id ?? MVP_USER_ID;
 
       // Get all chatbots for this user
       const chatbots = await blink.db.chatbots.list({
-        where: { user_id: user.id }
+        where: { user_id: userId }
       });
       const botIds = chatbots.map(b => b.id);
 

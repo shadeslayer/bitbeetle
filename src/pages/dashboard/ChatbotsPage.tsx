@@ -37,6 +37,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { blink } from '@/lib/blink';
+
+// MVP bypass: hardcoded user until auth is implemented
+const MVP_USER_ID = 'demo';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,11 +59,11 @@ export default function ChatbotsPage() {
 
   const fetchChatbots = async () => {
     try {
-      const user = await blink.auth.me();
-      if (!user) return;
+      const user = await blink.auth.me().catch(() => null);
+      const userId = user?.id ?? MVP_USER_ID;
       
       const data = await blink.db.chatbots.list({
-        where: { user_id: user.id },
+        where: { user_id: userId },
         orderBy: { created_at: 'desc' }
       });
       setChatbots(data);
@@ -80,8 +83,8 @@ export default function ChatbotsPage() {
 
     setIsSubmitting(true);
     try {
-      const user = await blink.auth.me();
-      if (!user) return;
+      const user = await blink.auth.me().catch(() => null);
+      const userId = user?.id ?? MVP_USER_ID;
 
       const widgetId = Math.random().toString(36).substring(2, 12);
       const botId = `bot_${Math.random().toString(36).substring(2, 10)}`;
@@ -90,7 +93,7 @@ export default function ChatbotsPage() {
         id: botId,
         name: newBotName,
         description: newBotDesc,
-        user_id: user.id,
+        user_id: userId,
         widget_id: widgetId,
         status: 'active',
         settings: JSON.stringify({

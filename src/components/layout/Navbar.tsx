@@ -1,34 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
-import { blink } from '@/lib/blink';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
-
-    const unsubscribe = blink.auth.onAuthStateChanged(({ user }) => {
-      setUser(user);
-    });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      unsubscribe();
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLogin = () => {
-    blink.auth.login(window.location.origin + '/dashboard');
-  };
-
-  const handleLogout = () => {
-    blink.auth.signOut();
-  };
+  const goToDashboard = () => { window.location.href = '/dashboard'; };
 
   return (
     <nav
@@ -73,43 +57,13 @@ export default function Navbar() {
               onMouseLeave={e => (e.currentTarget.style.color = 'var(--color-text-secondary)')}>Docs</a>
           </div>
           <div className="flex items-center gap-3 pl-6 border-l" style={{ borderColor: 'var(--color-border-subtle)' }}>
-            {user ? (
-              <>
-                <Button
-                  variant="ghost"
-                  className="text-sm font-medium"
-                  style={{ color: 'var(--color-text-secondary)' }}
-                  onClick={() => window.location.href = '/dashboard'}
-                >
-                  Dashboard
-                </Button>
-                <Button
-                  className="text-sm font-medium rounded-full"
-                  style={{ background: 'var(--color-accent-cyan)', color: '#0A1628', fontWeight: 600 }}
-                  onClick={handleLogout}
-                >
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  variant="ghost"
-                  className="text-sm font-medium"
-                  style={{ color: 'var(--color-text-secondary)' }}
-                  onClick={handleLogin}
-                >
-                  Login
-                </Button>
-                <Button
-                  className="text-sm font-medium rounded-full"
-                  style={{ background: 'var(--color-accent-cyan)', color: '#0A1628', fontWeight: 600 }}
-                  onClick={handleLogin}
-                >
-                  Get Started
-                </Button>
-              </>
-            )}
+            <Button
+              className="text-sm font-medium rounded-full"
+              style={{ background: 'var(--color-accent-cyan)', color: '#0A1628', fontWeight: 600 }}
+              onClick={goToDashboard}
+            >
+              Get Started
+            </Button>
           </div>
         </div>
 
@@ -130,33 +84,13 @@ export default function Navbar() {
             <a href="#pricing" className="text-lg font-medium" style={{ color: 'var(--color-text-secondary)' }} onClick={() => setMobileMenuOpen(false)}>Pricing</a>
             <a href="#docs" className="text-lg font-medium" style={{ color: 'var(--color-text-secondary)' }} onClick={() => setMobileMenuOpen(false)}>Docs</a>
             <div className="pt-4 border-t flex flex-col gap-3" style={{ borderColor: 'var(--color-border-subtle)' }}>
-              {user ? (
-                <Button
-                  className="w-full rounded-full"
-                  style={{ background: 'var(--color-accent-cyan)', color: '#0A1628', fontWeight: 600 }}
-                  onClick={() => window.location.href = '/dashboard'}
-                >
-                  Dashboard
-                </Button>
-              ) : (
-                <>
-                  <Button
-                    variant="outline"
-                    className="w-full rounded-full"
-                    style={{ color: 'var(--color-text-secondary)' }}
-                    onClick={handleLogin}
-                  >
-                    Login
-                  </Button>
-                  <Button
-                    className="w-full rounded-full"
-                    style={{ background: 'var(--color-accent-cyan)', color: '#0A1628', fontWeight: 600 }}
-                    onClick={handleLogin}
-                  >
-                    Get Started
-                  </Button>
-                </>
-              )}
+              <Button
+                className="w-full rounded-full"
+                style={{ background: 'var(--color-accent-cyan)', color: '#0A1628', fontWeight: 600 }}
+                onClick={goToDashboard}
+              >
+                Get Started
+              </Button>
             </div>
           </div>
         </div>
