@@ -487,7 +487,7 @@
                   </div>
                   <div class="msg-bubble-wrap">
                     <div class="msg-sender" x-text="selectedConv.contact.name"></div>
-                    <div class="chat-msg chat-msg-agent" x-text="msg.content"></div>
+                    <div class="chat-msg chat-msg-customer" x-text="msg.content"></div>
                     <div class="msg-time" x-text="msg.time"></div>
                   </div>
                 </div>
@@ -1115,7 +1115,7 @@ function dashboard() {
     copilotInitialized: false,
 
     init() {
-      bbGuard();
+      if (!bbGuard()) return;
       this.session = bbGetSession();
       document.documentElement.setAttribute('data-theme', this.theme);
     },
@@ -1223,7 +1223,7 @@ function dashboard() {
       if (!this.composeText.trim() || !this.selectedConv) return;
       const msg = {
         id: Date.now(), role: 'assistant',
-        type: this.composeTab === 'note' ? 'agent' : 'agent',
+        type: this.composeTab === 'note' ? 'note' : 'agent',
         content: this.composeText.trim(), time: 'Just now'
       };
       this.selectedConv.messages.push(msg);
@@ -1308,8 +1308,7 @@ function dashboard() {
         return;
       }
 
-      const historyForApi = this.copilotMessages.slice(0, -1).map(m => ({ role: m.role, content: m.content }));
-      historyForApi.push({ role: 'user', content: userMsg });
+      const historyForApi = this.copilotMessages.map(m => ({ role: m.role, content: m.content }));
       const messages = buildCopilotMessages(this.selectedConv, historyForApi);
 
       let fullText = '';
