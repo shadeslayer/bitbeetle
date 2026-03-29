@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BitBeetle — AI-powered customer support for B2B SaaS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#f4f3ec', 'cream-light': '#fbfaf7', 'cream-dark': '#ede9df',
+            ink: '#17100e', 'ink-secondary': '#4a403a', 'ink-tertiary': '#8a7e78', 'ink-faint': '#c8c0ba',
+            navy: '#07070f', 'navy-mid': '#0e0d1a', 'navy-card': '#13121f', 'navy-border': '#1e1c2e', 'navy-muted': '#2a2840',
+            purple: '#7c3aed', 'purple-light': '#a78bfa', 'purple-bright': '#8b5cf6',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/bitbeetle.css">
+  <style>
+    .hero-section { padding: var(--space-24) var(--space-6) var(--space-20); max-width: 1200px; margin: 0 auto; }
+    .content-section { max-width: 1200px; margin: 0 auto; padding: var(--space-20) var(--space-6); }
+    .check-item { display: flex; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-3); }
+    .check-dot { width: 20px; height: 20px; border-radius: 50%; background: var(--success-light); border: 2px solid var(--success); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+    .check-dot svg { width: 10px; height: 10px; color: var(--success); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--space-12); }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .hero-email-wrap { flex-direction: column; }
+      .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .bento-grid { grid-template-columns: 1fr !important; }
+      .pricing-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Announcement bar -->
+  <div class="announcement" style="border-radius:0;border-left:none;border-right:none;">
+    Now in early access — <a href="#pricing" style="color:var(--orange);font-weight:700;">get €200 in free AI credits →</a>
+  </div>
+
+  <!-- Sticky nav -->
+  <header class="ds-header" style="border-radius:0;">
+    <div style="display:flex;align-items:center;gap:var(--space-8);">
+      <div class="ds-logo">🪲 <span style="color:var(--text-primary);">BitBeetle</span></div>
+      <nav class="ds-nav" style="display:flex;gap:var(--space-6);">
+        <a href="#features">Product</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#about">Company</a>
+      </nav>
+    </div>
+    <div class="ds-actions">
+      <a href="login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="login.html" class="btn btn-primary btn-sm">Start free</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero-section" style="text-align:center;">
+    <div class="section-pill section-pill--orange" style="display:inline-flex;margin-bottom:var(--space-6);">AI SUPPORT PLATFORM</div>
+    <h1 class="display-hero" style="max-width:760px;margin:0 auto var(--space-6);">
+      The support platform that <em>closes tickets,</em> not just routes them.
+    </h1>
+    <p style="font-size:var(--text-md);color:var(--text-secondary);max-width:560px;margin:0 auto var(--space-10);line-height:1.6;">
+      BitBeetle unifies email, Slack, and Teams into one inbox. Its AI agent reads your docs and codebase to resolve issues at first contact.
+    </p>
+    <div class="input-hero-wrap hero-email-wrap" style="margin:0 auto;justify-content:center;">
+      <input class="input-hero" type="email" placeholder="your@company.com" style="min-width:240px;">
+      <a href="login.html" class="btn btn-primary">Start free <span class="arrow" style="background:rgba(255,255,255,0.2);width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-left:4px;">→</span></a>
+    </div>
+    <p style="margin-top:var(--space-6);font-size:var(--text-sm);color:var(--text-muted);">
+      Validated with CTOs at Coniq, Vip District, Signaturit, and Altima — no credit card required
+    </p>
+  </section>
+
+  <!-- Problem bento grid -->
+  <section class="content-section" style="padding-top:0;">
+    <div style="text-align:center;margin-bottom:var(--space-12);">
+      <div class="section-label" style="justify-content:center;">THE PROBLEM</div>
+      <h2 class="section-title">Support is broken at the handoff</h2>
+      <p class="section-subtitle" style="margin:0 auto;text-align:center;">
+        B2B SaaS companies lose hours — and customers — when support and engineering operate without shared context.
+      </p>
+    </div>
+    <div class="bento-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-6);">
+      <div class="bento">
+        <div class="bento-label">01 — FRAGMENTATION</div>
+        <div class="bento-title">Support teams drown in noise</div>
+        <div class="bento-body">Email, Slack, and Teams tickets arrive in separate tools. Nothing is unified. Context is lost between channels.</div>
+      </div>
+      <div class="bento" style="--pill-color:var(--orange);">
+        <div class="bento-label">02 — ESCALATION</div>
+        <div class="bento-title">Engineers lose hours reconstructing bugs</div>
+        <div class="bento-body">Developers spend more time understanding what the customer experienced than actually fixing the root cause.</div>
+      </div>
+      <div class="bento" style="--pill-color:var(--teal-dark);">
+        <div class="bento-label">03 — KNOWLEDGE LOSS</div>
+        <div class="bento-title">Knowledge evaporates between tickets</div>
+        <div class="bento-body">Every resolved ticket is an opportunity to learn. Without a persistent knowledge layer, the same issues repeat.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" style="padding:var(--space-20) var(--space-6);">
+    <div style="max-width:1200px;margin:0 auto;background:var(--cream-dark);border-radius:var(--radius-2xl);padding:var(--space-16) var(--space-12);">
+    <div style="text-align:center;margin-bottom:var(--space-12);">
+      <div class="section-label" style="justify-content:center;">FEATURES</div>
+      <h2 class="section-title" style="text-align:center;">Everything your support team needs</h2>
+      <p class="section-subtitle" style="margin:0 auto;text-align:center;">
+        One platform that handles the full support lifecycle — from first contact to engineering resolution.
+      </p>
+    </div>
+    <div class="grid-2" style="gap:var(--space-6);max-width:800px;margin:0 auto;">
+      <div class="card-feature">
+        <div class="card-feature-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="card-feature-title">Unified Inbox</div>
+        <div class="card-feature-body">All channels in one place. Email, Slack, Microsoft Teams, and in-product chat consolidated into a single, prioritised inbox.</div>
+        <a href="login.html" class="card-feature-link">See it in action →</a>
+      </div>
+      <div class="card-feature">
+        <div class="card-feature-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <div class="card-feature-title">AI Resolution Agent</div>
+        <div class="card-feature-body">Resolves Level 1 issues autonomously. The AI reads your technical documentation and live code repository to answer accurately at first contact.</div>
+        <a href="login.html" class="card-feature-link">See it in action →</a>
+      </div>
+      <div class="card-feature">
+        <div class="card-feature-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="card-feature-title">Smart Escalation</div>
+        <div class="card-feature-body">When a ticket needs engineering, the AI packages a structured diagnostic context — customer history, error logs, relevant docs — so developers can act in minutes, not hours.</div>
+        <a href="login.html" class="card-feature-link">See it in action →</a>
+      </div>
+      <div class="card-feature">
+        <div class="card-feature-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="card-feature-title">Knowledge Base</div>
+        <div class="card-feature-body">Every resolved ticket improves the AI's knowledge layer. The more you use BitBeetle, the faster and more accurate it gets for your specific codebase.</div>
+        <a href="login.html" class="card-feature-link">See it in action →</a>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="content-section">
+    <div class="grid-3">
+      <div class="stat-card">
+        <div class="stat-label">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Market size by 2029
+        </div>
+        <div class="stat-value">€22B</div>
+        <div class="stat-delta up">↑ 14% annually</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          AI first-response time
+        </div>
+        <div class="stat-value">&lt;2m</div>
+        <div class="stat-delta up">↑ vs. 4h industry avg</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Discovery validation
+        </div>
+        <div class="stat-value">4/4</div>
+        <div class="stat-delta up">↑ CTOs confirmed problem</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="content-section">
+    <div style="text-align:center;margin-bottom:var(--space-12);">
+      <div class="section-label" style="justify-content:center;">PRICING</div>
+      <h2 class="section-title">Simple, transparent pricing</h2>
+      <p class="section-subtitle" style="margin:0 auto;text-align:center;">
+        Start free, scale as you grow. All plans include the unified inbox — AI capabilities unlock with Growth.
+      </p>
+    </div>
+    <div class="pricing-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-6);align-items:start;">
+      <!-- Free -->
+      <div class="pricing-card">
+        <div style="margin-bottom:var(--space-6);">
+          <div style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:var(--space-3);">Free</div>
+          <div style="font-family:var(--font-sans);font-size:var(--text-4xl);font-weight:800;letter-spacing:-0.04em;color:var(--text-primary);line-height:1;">€0</div>
+          <div style="color:var(--text-muted);font-size:var(--text-sm);margin-top:var(--space-1);">1 seat, forever free</div>
+        </div>
+        <a href="login.html" class="btn btn-outline" style="width:100%;margin-bottom:var(--space-8);">Get started free</a>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Unified inbox (email, Slack, Teams)</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">1 seat</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">50 AI interactions/month</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Basic reporting</span></div>
+        </div>
+      </div>
+      <!-- Growth (featured) -->
+      <div class="pricing-card featured" style="border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow-xl);">
+        <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);">
+          <span class="badge badge-blue" style="background:var(--ink);color:white;">Most popular</span>
+        </div>
+        <div style="margin-bottom:var(--space-6);">
+          <div style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:var(--space-3);">Growth</div>
+          <div style="font-family:var(--font-sans);font-size:var(--text-4xl);font-weight:800;letter-spacing:-0.04em;color:var(--text-primary);line-height:1;">€49</div>
+          <div style="color:var(--text-muted);font-size:var(--text-sm);margin-top:var(--space-1);">per seat / month, billed annually</div>
+        </div>
+        <a href="login.html" class="btn btn-primary" style="width:100%;margin-bottom:var(--space-8);">Start Growth trial</a>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Everything in Free</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Unlimited seats</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Level 1 AI resolution agent</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Jira &amp; Linear integration</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">SLA management</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Knowledge base (learns from tickets)</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">AI Copilot for agents</span></div>
+        </div>
+      </div>
+      <!-- Scale -->
+      <div class="pricing-card">
+        <div style="margin-bottom:var(--space-6);">
+          <div style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:var(--space-3);">Scale</div>
+          <div style="font-family:var(--font-sans);font-size:var(--text-4xl);font-weight:800;letter-spacing:-0.04em;color:var(--text-primary);line-height:1;">€129</div>
+          <div style="color:var(--text-muted);font-size:var(--text-sm);margin-top:var(--space-1);">per seat / month, billed annually</div>
+        </div>
+        <a href="login.html" class="btn btn-outline" style="width:100%;margin-bottom:var(--space-8);">Contact sales</a>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Everything in Growth</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Level 2 escalation engine</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Staging environment replication</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Advanced reporting &amp; analytics</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">CRM integrations</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">SSO / SCIM provisioning</span></div>
+          <div class="check-item"><div class="check-dot"><svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2,5 4,7 8,3"/></svg></div><span style="font-size:var(--text-sm);color:var(--text-secondary);">Dedicated Customer Success Manager</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA section -->
+  <section id="about" class="content-section" style="padding-top:0;">
+    <div class="bento" style="background:var(--ink);border-radius:var(--radius-2xl);padding:var(--space-16);text-align:center;min-height:auto;">
+      <div class="section-pill section-pill--blue" style="display:inline-flex;margin-bottom:var(--space-6);color:var(--purple-light);">GET STARTED</div>
+      <h2 style="font-family:var(--font-sans);font-size:var(--text-3xl);font-weight:800;color:#f0eeff;letter-spacing:-0.03em;margin-bottom:var(--space-4);">
+        Stop routing tickets. Start resolving them.
+      </h2>
+      <p style="color:#9d9bb8;font-size:var(--text-md);max-width:480px;margin:0 auto var(--space-8);line-height:1.6;">
+        Join B2B SaaS companies in Spain using BitBeetle to cut support resolution times and keep engineering focused on shipping.
+      </p>
+      <a href="login.html" class="btn btn-lg" style="background:var(--purple-bright);color:white;border-color:var(--purple-bright);">
+        Start free — no credit card <span style="margin-left:var(--space-2);">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="border-top:1px solid var(--border-subtle);padding:var(--space-16) var(--space-6);max-width:1200px;margin:0 auto;">
+    <div class="footer-grid" style="margin-bottom:var(--space-12);">
+      <div>
+        <div style="font-family:var(--font-sans);font-size:var(--text-md);font-weight:800;color:var(--text-primary);letter-spacing:-0.02em;margin-bottom:var(--space-4);">🪲 BitBeetle</div>
+        <p style="color:var(--text-muted);font-size:var(--text-sm);line-height:1.7;max-width:260px;">
+          AI-powered customer support for B2B SaaS companies. Unified inbox. Intelligent resolution. Built in Barcelona.
+        </p>
+      </div>
+      <div>
+        <div style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);margin-bottom:var(--space-4);text-transform:uppercase;letter-spacing:0.06em;">Product</div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+          <a href="#features" style="color:var(--text-muted);font-size:var(--text-sm);">Features</a>
+          <a href="#pricing" style="color:var(--text-muted);font-size:var(--text-sm);">Pricing</a>
+          <a href="login.html" style="color:var(--text-muted);font-size:var(--text-sm);">Dashboard</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);margin-bottom:var(--space-4);text-transform:uppercase;letter-spacing:0.06em;">Company</div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+          <a href="#about" style="color:var(--text-muted);font-size:var(--text-sm);">About</a>
+          <a href="#" style="color:var(--text-muted);font-size:var(--text-sm);">Blog</a>
+          <a href="#" style="color:var(--text-muted);font-size:var(--text-sm);">Careers</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);margin-bottom:var(--space-4);text-transform:uppercase;letter-spacing:0.06em;">Legal</div>
+        <div style="display:flex;flex-direction:column;gap:var(--space-3);">
+          <a href="#" style="color:var(--text-muted);font-size:var(--text-sm);">Privacy</a>
+          <a href="#" style="color:var(--text-muted);font-size:var(--text-sm);">Terms</a>
+          <a href="#" style="color:var(--text-muted);font-size:var(--text-sm);">Security</a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--border-subtle);padding-top:var(--space-8);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-4);">
+      <p style="color:var(--text-muted);font-size:var(--text-sm);">© 2026 BitBeetle. All rights reserved. Built in Barcelona 🇪🇸</p>
+      <p style="color:var(--text-muted);font-size:var(--text-sm);">EMBA Final Business Project — Rohan Garg, Sara Genovesi, Luiz Sales</p>
+    </div>
+  </footer>
+</body>
+</html>

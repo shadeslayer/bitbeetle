@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in — BitBeetle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#f4f3ec', 'cream-light': '#fbfaf7', 'cream-dark': '#ede9df',
+            ink: '#17100e', 'ink-secondary': '#4a403a', 'ink-tertiary': '#8a7e78', 'ink-faint': '#c8c0ba',
+            navy: '#07070f', 'navy-mid': '#0e0d1a', 'navy-card': '#13121f', 'navy-border': '#1e1c2e', 'navy-muted': '#2a2840',
+            purple: '#7c3aed', 'purple-light': '#a78bfa', 'purple-bright': '#8b5cf6',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/bitbeetle.css">
+  <script src="assets/js/auth.js"></script>
+  <style>
+    .login-split { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+    @media (max-width: 768px) { .login-split { grid-template-columns: 1fr; } .login-brand { display: none; } }
+    .login-brand {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 40%, #1a0a3e 100%);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+      padding: var(--space-16);
+    }
+    .login-brand::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(124,58,237,0.25) 0%, transparent 60%);
+    }
+    /* Registration mark grid motif */
+    .reg-mark { position: absolute; width: 8px; height: 8px; background: var(--purple-bright); opacity: 0.6; }
+    .login-right {
+      display: flex; align-items: center; justify-content: center;
+      background: var(--cream-light); padding: var(--space-8);
+    }
+    .login-form-card { width: 100%; max-width: 400px; }
+  </style>
+</head>
+<body>
+  <div class="login-split">
+    <!-- Brand panel -->
+    <div class="login-brand">
+      <div class="reg-mark" style="top:40px;right:48px;"></div>
+      <div class="reg-mark" style="top:80px;right:88px;opacity:0.3;"></div>
+      <div class="reg-mark" style="bottom:60px;left:40px;"></div>
+      <div class="reg-mark" style="bottom:100px;left:80px;opacity:0.3;"></div>
+      <div class="reg-mark" style="top:50%;left:60px;opacity:0.2;"></div>
+      <div style="position:relative;z-index:1;">
+        <div style="font-family:var(--font-sans);font-size:2rem;font-weight:800;color:#f0eeff;letter-spacing:-0.03em;margin-bottom:var(--space-6);">
+          🪲 BitBeetle
+        </div>
+        <div style="font-family:var(--font-display);font-size:var(--text-3xl);color:#f0eeff;line-height:1.2;font-style:italic;margin-bottom:var(--space-8);max-width:380px;">
+          Your AI support agent, always on.
+        </div>
+        <p style="color:var(--text-secondary);font-size:var(--text-base);line-height:1.7;max-width:360px;">
+          Unify email, Slack, and Teams into one inbox. Let AI resolve Level 1 tickets instantly — while your team focuses on what matters.
+        </p>
+        <div style="margin-top:var(--space-12);display:flex;flex-direction:column;gap:var(--space-4);">
+          <div style="display:flex;align-items:center;gap:var(--space-3);color:#9d9bb8;font-size:var(--text-sm);">
+            <span style="color:var(--purple-light);font-size:1.1rem;">✦</span>
+            Validated with CTOs at Coniq, Vip District, and Signaturit
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-3);color:#9d9bb8;font-size:var(--text-sm);">
+            <span style="color:var(--purple-light);font-size:1.1rem;">✦</span>
+            AI resolves tickets in under 2 minutes at first contact
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-3);color:#9d9bb8;font-size:var(--text-sm);">
+            <span style="color:var(--purple-light);font-size:1.1rem;">✦</span>
+            €49/seat/mo — Growth tier available today
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login form -->
+    <div class="login-right">
+      <div class="login-form-card">
+        <div style="margin-bottom:var(--space-8);">
+          <a href="index.html" style="font-family:var(--font-sans);font-size:var(--text-md);font-weight:800;color:var(--text-primary);letter-spacing:-0.02em;text-decoration:none;">
+            🪲 BitBeetle
+          </a>
+        </div>
+
+        <div style="margin-bottom:var(--space-8);">
+          <h1 style="font-family:var(--font-sans);font-size:var(--text-2xl);font-weight:800;letter-spacing:-0.03em;color:var(--text-primary);margin-bottom:var(--space-2);">
+            Welcome back
+          </h1>
+          <p style="color:var(--text-secondary);font-size:var(--text-base);">
+            Sign in to your workspace
+          </p>
+        </div>
+
+        <!-- Error alert (hidden by default) -->
+        <div id="loginError" class="alert alert-error" style="display:none;margin-bottom:var(--space-4);">
+          <span class="alert-icon">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </span>
+          <div class="alert-content">
+            <div class="alert-title">Invalid credentials</div>
+            <div>Please check your email and password and try again.</div>
+          </div>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)" style="display:flex;flex-direction:column;gap:var(--space-5);">
+          <div class="input-group">
+            <label class="input-label" for="email">Email address</label>
+            <input class="input" type="email" id="email" name="email" placeholder="you@company.com" required autocomplete="email">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="password">Password</label>
+            <input class="input" type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:var(--space-2);">
+            Sign in
+          </button>
+        </form>
+
+        <div style="margin-top:var(--space-6);padding:var(--space-4);background:var(--cream-dark);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
+          <p style="font-size:var(--text-sm);color:var(--text-muted);text-align:center;">
+            <strong style="color:var(--text-secondary);">Demo access:</strong>
+            admin@bitbeetle.com / password
+          </p>
+        </div>
+
+        <p style="margin-top:var(--space-8);text-align:center;font-size:var(--text-sm);color:var(--text-muted);">
+          Don't have an account?
+          <a href="index.html#pricing" style="color:var(--accent);font-weight:600;">Start free →</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Redirect if already logged in
+    if (bbGetSession()) window.location.href = 'dashboard.html';
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('loginError');
+
+      if (bbLogin(email, password)) {
+        window.location.href = 'dashboard.html';
+      } else {
+        errorEl.style.display = 'flex';
+        document.getElementById('password').value = '';
+        document.getElementById('password').focus();
+      }
+    }
+  </script>
+</body>
+</html>
