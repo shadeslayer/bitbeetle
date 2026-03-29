@@ -49,6 +49,15 @@ async function streamOpenRouter({ messages, onToken, onDone, onError }) {
       }
     }
 
+    // Flush any remaining buffer content after stream ends
+    if (buffer.trim() && buffer.trim().startsWith('data: ') && buffer.trim() !== 'data: [DONE]') {
+      try {
+        const json = JSON.parse(buffer.trim().slice(6));
+        const token = json.choices?.[0]?.delta?.content;
+        if (token) onToken(token);
+      } catch (_) {}
+    }
+
     onDone();
   } catch (err) {
     onError(err);

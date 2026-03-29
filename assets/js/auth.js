@@ -23,7 +23,9 @@ function bbLogin(email, password) {
 function bbGuard() {
   if (!localStorage.getItem(SESSION_KEY)) {
     window.location.href = '/login.html';
+    return false;
   }
+  return true;
 }
 
 function bbLogout() {
@@ -33,5 +35,11 @@ function bbLogout() {
 
 function bbGetSession() {
   const raw = localStorage.getItem(SESSION_KEY);
-  return raw ? JSON.parse(raw) : null;
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch (_) {
+    localStorage.removeItem(SESSION_KEY);
+    return null;
+  }
 }
