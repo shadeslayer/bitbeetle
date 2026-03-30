@@ -162,6 +162,13 @@
       margin-top: 2px;
     }
     .conv-card-badges { display: flex; gap: var(--space-2); margin-top: var(--space-2); flex-wrap: wrap; }
+    .conv-group-label {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--space-2) var(--space-4); margin-top: var(--space-2);
+      font-family: var(--font-sans); font-size: var(--text-xs); font-weight: 700;
+      color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border);
+    }
     .unread-dot {
       width: 8px; height: 8px; background: var(--accent);
       border-radius: var(--radius-full); flex-shrink: 0;
@@ -366,7 +373,7 @@
     <div style="padding:var(--space-3) var(--space-4);">
       <div style="position:relative;">
         <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="input" type="search" placeholder="Search conversations…" style="padding-left:32px;font-size:var(--text-sm);height:34px;">
+        <input class="input" type="search" placeholder="Search conversations…" style="padding-left:32px;font-size:var(--text-sm);height:34px;" x-model="searchQuery" @input="selectedConv = null">
       </div>
     </div>
 
@@ -407,11 +414,11 @@
     </div>
 
     <div class="sidebar-section-label">Views</div>
-    <div class="sidebar-item">
+    <div class="sidebar-item" :class="{ active: sidebarFilter === 'byCompany' }" @click="sidebarFilter='byCompany'; convFilter='all'">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       By company
     </div>
-    <div class="sidebar-item">
+    <div class="sidebar-item" :class="{ active: sidebarFilter === 'byChannel' }" @click="sidebarFilter='byChannel'; convFilter='all'">
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
       By channel
     </div>
@@ -427,7 +434,7 @@
   <!-- Panel 3: Conversation List -->
   <div class="db-panel db-conv-list" x-show="activeNav === 'inbox'">
     <div class="db-conv-header">
-      <span style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);" x-text="{ all:'All Conversations', mine:'Your Inbox', mentions:'Mentions', created:'Created by You', unassigned:'Unassigned', ai:'AI Handling', escalated:'Escalated', resolved:'Resolved' }[sidebarFilter] || 'All Conversations'"></span>
+      <span style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);" x-text="{ all:'All Conversations', mine:'Your Inbox', mentions:'Mentions', created:'Created by You', unassigned:'Unassigned', ai:'AI Handling', escalated:'Escalated', resolved:'Resolved', byCompany:'By Company', byChannel:'By Channel' }[sidebarFilter] || 'All Conversations'"></span>
       <div style="display:flex;gap:var(--space-2);">
         <button class="nav-icon-btn" style="width:28px;height:28px;" title="Filter">
           <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
@@ -444,27 +451,76 @@
       <button class="conv-filter-tab" :class="{ active: convFilter === 'Escalated' }" @click="convFilter='Escalated'">Escalated</button>
     </div>
 
-    <template x-for="conv in filteredConversations()" :key="conv.id">
-      <div class="conv-card" :class="{ selected: selectedConv?.id === conv.id }" @click="selectConversation(conv)">
-        <div class="conv-card-top">
-          <div class="avatar avatar-sm" :style="`background:${conv.contact.color};flex-shrink:0;`">
-            <span x-text="conv.contact.initials" style="font-size:10px;"></span>
-          </div>
-          <div class="conv-card-meta">
-            <div class="conv-card-name">
-              <span x-text="conv.contact.name + ' · ' + conv.company"></span>
-              <span style="display:flex;align-items:center;gap:var(--space-1);flex-shrink:0;">
-                <div class="unread-dot" x-show="conv.unread"></div>
-                <span class="conv-card-time" x-text="conv.time"></span>
-              </span>
+    <!-- Flat list (default filters) -->
+    <template x-if="sidebarFilter !== 'byCompany' && sidebarFilter !== 'byChannel'">
+      <div>
+        <template x-for="conv in filteredConversations()" :key="conv.id">
+          <div class="conv-card" :class="{ selected: selectedConv?.id === conv.id }" @click="selectConversation(conv)">
+            <div class="conv-card-top">
+              <div class="avatar avatar-sm" :style="`background:${conv.contact.color};flex-shrink:0;`">
+                <span x-text="conv.contact.initials" style="font-size:10px;"></span>
+              </div>
+              <div class="conv-card-meta">
+                <div class="conv-card-name">
+                  <span x-text="conv.contact.name + ' · ' + conv.company"></span>
+                  <span style="display:flex;align-items:center;gap:var(--space-1);flex-shrink:0;">
+                    <div class="unread-dot" x-show="conv.unread"></div>
+                    <span class="conv-card-time" x-text="conv.time"></span>
+                  </span>
+                </div>
+                <div class="conv-card-preview" x-text="conv.preview"></div>
+                <div class="conv-card-badges">
+                  <span class="badge badge-sm" :class="CHANNEL_COLORS[conv.channel]" x-text="conv.channel"></span>
+                  <span class="badge badge-sm" :class="STATUS_COLORS[conv.status]" x-text="conv.status"></span>
+                </div>
+              </div>
             </div>
-            <div class="conv-card-preview" x-text="conv.preview"></div>
-            <div class="conv-card-badges">
-              <span class="badge badge-sm" :class="CHANNEL_COLORS[conv.channel]" x-text="conv.channel"></span>
-              <span class="badge badge-sm" :class="STATUS_COLORS[conv.status]" x-text="conv.status"></span>
-            </div>
           </div>
-        </div>
+        </template>
+      </div>
+    </template>
+
+    <!-- Grouped views: By Company / By Channel -->
+    <template x-if="sidebarFilter === 'byCompany' || sidebarFilter === 'byChannel'">
+      <div>
+        <template x-for="group in groupedConversations()" :key="group.key">
+          <div>
+            <div class="conv-group-label">
+              <template x-if="sidebarFilter === 'byChannel'">
+                <span class="badge badge-sm" :class="CHANNEL_COLORS[group.key]" x-text="group.key"></span>
+              </template>
+              <template x-if="sidebarFilter === 'byCompany'">
+                <span x-text="group.key"></span>
+              </template>
+              <span class="item-count" x-text="group.conversations.length"></span>
+            </div>
+            <template x-for="conv in group.conversations" :key="conv.id">
+              <div class="conv-card" :class="{ selected: selectedConv?.id === conv.id }" @click="selectConversation(conv)">
+                <div class="conv-card-top">
+                  <div class="avatar avatar-sm" :style="`background:${conv.contact.color};flex-shrink:0;`">
+                    <span x-text="conv.contact.initials" style="font-size:10px;"></span>
+                  </div>
+                  <div class="conv-card-meta">
+                    <div class="conv-card-name">
+                      <span x-text="sidebarFilter === 'byCompany' ? conv.contact.name : conv.contact.name + ' · ' + conv.company"></span>
+                      <span style="display:flex;align-items:center;gap:var(--space-1);flex-shrink:0;">
+                        <div class="unread-dot" x-show="conv.unread"></div>
+                        <span class="conv-card-time" x-text="conv.time"></span>
+                      </span>
+                    </div>
+                    <div class="conv-card-preview" x-text="conv.preview"></div>
+                    <div class="conv-card-badges">
+                      <template x-if="sidebarFilter === 'byCompany'">
+                        <span class="badge badge-sm" :class="CHANNEL_COLORS[conv.channel]" x-text="conv.channel"></span>
+                      </template>
+                      <span class="badge badge-sm" :class="STATUS_COLORS[conv.status]" x-text="conv.status"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
       </div>
     </template>
   </div>
@@ -1353,6 +1409,7 @@ function dashboard() {
     activeNav: 'inbox',
     sidebarFilter: 'all',
     convFilter: 'all',
+    searchQuery: '',
     selectedConv: null,
     rightTab: 'details',
     composeTab: 'reply',
@@ -1407,7 +1464,39 @@ function dashboard() {
       if (this.convFilter !== 'all') {
         list = list.filter(c => c.status === this.convFilter);
       }
+      // search filter
+      if (this.searchQuery.trim()) {
+        const q = this.searchQuery.toLowerCase();
+        list = list.filter(c =>
+          c.contact.name.toLowerCase().includes(q) ||
+          c.company.toLowerCase().includes(q) ||
+          c.preview.toLowerCase().includes(q) ||
+          c.id.toLowerCase().includes(q)
+        );
+      }
       return list;
+    },
+
+    groupedConversations() {
+      const key = this.sidebarFilter === 'byCompany' ? 'company' : 'channel';
+      let list = MOCK_CONVERSATIONS;
+      if (this.convFilter !== 'all') list = list.filter(c => c.status === this.convFilter);
+      if (this.searchQuery.trim()) {
+        const q = this.searchQuery.toLowerCase();
+        list = list.filter(c =>
+          c.contact.name.toLowerCase().includes(q) ||
+          c.company.toLowerCase().includes(q) ||
+          c.preview.toLowerCase().includes(q) ||
+          c.id.toLowerCase().includes(q)
+        );
+      }
+      const groups = {};
+      for (const c of list) {
+        const k = c[key];
+        if (!groups[k]) groups[k] = { key: k, conversations: [] };
+        groups[k].conversations.push(c);
+      }
+      return Object.values(groups).sort((a, b) => a.key.localeCompare(b.key));
     },
 
     sidebarCount(filter) {
