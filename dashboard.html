@@ -1426,6 +1426,7 @@ function dashboard() {
     dismissOnboarding() {
       localStorage.setItem('bb_onboarding_done', '1');
       this.showOnboarding = false;
+      this.activeNav = 'inbox';
     },
 
     nextOnboardingStep() {
