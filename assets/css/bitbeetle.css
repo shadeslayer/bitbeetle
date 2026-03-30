@@ -1068,6 +1068,15 @@
       word-break: break-word;
       overflow-wrap: break-word;
     }
+    .chat-msg-customer {
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      border-bottom-left-radius: var(--radius-sm);
+    }
+    [data-theme="dark"] .chat-msg-customer {
+      background: rgba(255,255,255,0.06);
+    }
     .chat-msg-user {
       align-self: flex-end;
       background: var(--ink);

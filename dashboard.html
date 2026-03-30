@@ -350,7 +350,7 @@
 </head>
 <body>
 <div x-data="dashboard()" x-init="init()" :data-theme="theme"
-  @keydown.window="if($event.key==='k'&&($event.metaKey||$event.ctrlKey)){$event.preventDefault();showSpotlight=true;$nextTick(()=>$refs.spotlightInput&&$refs.spotlightInput.focus())}"
+  @keydown.window="if($event.key==='k'&&($event.metaKey||$event.ctrlKey)){$event.preventDefault();showSpotlight=true;}"
   @keydown.escape.window="showSpotlight=false"
 >
 
@@ -483,15 +483,12 @@
           <button class="nav-icon-btn" style="width:28px;height:28px;" :style="convFilter!=='all'?'color:var(--accent);background:var(--blue-lightest);':''" title="Filter" @click="filterDropdown=!filterDropdown;sortDropdown=false">
             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
           </button>
-          <div x-show="filterDropdown" @click.away="filterDropdown=false" x-cloak
-            style="position:absolute;right:0;top:calc(100% + 4px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:160px;z-index:50;overflow:hidden;">
+          <div x-show="filterDropdown" @click.away="filterDropdown=false" x-cloak class="menu" style="left:auto;right:0;">
             <template x-for="opt in [{val:'all',label:'All statuses'},{val:'Open',label:'Open'},{val:'AI Handling',label:'AI Handling'},{val:'Escalated',label:'Escalated'},{val:'Resolved',label:'Resolved'}]" :key="opt.val">
-              <button @click="convFilter=opt.val;filterDropdown=false"
-                :style="convFilter===opt.val?'background:var(--blue-lightest);color:var(--accent);font-weight:600;':''"
-                style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:var(--space-2) var(--space-4);font-size:var(--text-sm);font-family:var(--font-sans);background:transparent;border:none;cursor:pointer;color:var(--text-primary);"
-                @mouseenter="$el.style.background='var(--bg-surface-raised)'" @mouseleave="$el.style.background=convFilter===$el.dataset.val?'var(--blue-lightest)':''">
+              <button @click="convFilter=opt.val;filterDropdown=false" class="menu-item"
+                :style="convFilter===opt.val ? 'color:var(--accent);font-weight:600;' : ''">
                 <span x-text="opt.label"></span>
-                <svg x-show="convFilter===opt.val" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg x-show="convFilter===opt.val" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="margin-left:auto;padding-left:var(--space-3);"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
             </template>
           </div>
@@ -501,15 +498,12 @@
           <button class="nav-icon-btn" style="width:28px;height:28px;" :style="sortOrder!=='newest'?'color:var(--accent);background:var(--blue-lightest);':''" title="Sort" @click="sortDropdown=!sortDropdown;filterDropdown=false">
             <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
           </button>
-          <div x-show="sortDropdown" @click.away="sortDropdown=false" x-cloak
-            style="position:absolute;right:0;top:calc(100% + 4px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:160px;z-index:50;overflow:hidden;">
+          <div x-show="sortDropdown" @click.away="sortDropdown=false" x-cloak class="menu" style="left:auto;right:0;">
             <template x-for="opt in [{val:'newest',label:'Newest first'},{val:'oldest',label:'Oldest first'},{val:'name',label:'Name A–Z'},{val:'company',label:'Company A–Z'}]" :key="opt.val">
-              <button @click="sortOrder=opt.val;sortDropdown=false"
-                :style="sortOrder===opt.val?'background:var(--blue-lightest);color:var(--accent);font-weight:600;':''"
-                style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:var(--space-2) var(--space-4);font-size:var(--text-sm);font-family:var(--font-sans);background:transparent;border:none;cursor:pointer;color:var(--text-primary);"
-                @mouseenter="$el.style.background='var(--bg-surface-raised)'" @mouseleave="$el.style.background=''">
+              <button @click="sortOrder=opt.val;sortDropdown=false" class="menu-item"
+                :style="sortOrder===opt.val ? 'color:var(--accent);font-weight:600;' : ''">
                 <span x-text="opt.label"></span>
-                <svg x-show="sortOrder===opt.val" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg x-show="sortOrder===opt.val" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="margin-left:auto;padding-left:var(--space-3);"><polyline points="20 6 9 17 4 12"/></svg>
               </button>
             </template>
           </div>
@@ -660,10 +654,10 @@
               </template>
               <!-- AI message -->
               <template x-if="msg.type === 'ai'">
-                <div class="msg-row customer">
+                <div class="msg-row agent">
                   <div class="avatar avatar-sm" style="background:var(--accent);flex-shrink:0;font-size:14px;">🪲</div>
                   <div class="msg-bubble-wrap">
-                    <div class="chat-ai-label">
+                    <div class="chat-ai-label" style="text-align:right;">
                       <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                       AI Agent
                     </div>
@@ -690,10 +684,10 @@
 
           <!-- Streaming AI response (auto-responder) -->
           <template x-if="isAutoResponding">
-            <div class="msg-row customer">
+            <div class="msg-row agent">
               <div class="avatar avatar-sm" style="background:var(--accent);flex-shrink:0;font-size:14px;">🪲</div>
               <div class="msg-bubble-wrap">
-                <div class="chat-ai-label">
+                <div class="chat-ai-label" style="text-align:right;">
                   <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                   AI Agent
                 </div>
@@ -1501,17 +1495,17 @@
 <!-- end onboarding -->
 
 <!-- Spotlight Search -->
-<div x-teleport="body">
-<div x-show="showSpotlight" x-cloak
+<template x-teleport="body">
+<div x-show="showSpotlight"
+  x-effect="if(showSpotlight) $nextTick(()=>{ const el=document.getElementById('spotlightInput'); if(el) el.focus(); })"
   style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;"
   @click.self="showSpotlight=false;spotlightQuery=''">
   <div style="width:580px;max-width:calc(100vw - 32px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.3);">
     <!-- Input row -->
     <div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--border);">
       <svg style="color:var(--text-muted);flex-shrink:0;" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input x-ref="spotlightInput" x-model="spotlightQuery" type="text" placeholder="Search conversations…"
+      <input id="spotlightInput" x-model="spotlightQuery" type="text" placeholder="Search conversations…"
         style="flex:1;background:transparent;border:none;outline:none;font-family:var(--font-sans);font-size:var(--text-base);color:var(--text-primary);"
-        x-effect="if(showSpotlight) $nextTick(()=>$el.focus())"
         @keydown.escape.stop="showSpotlight=false;spotlightQuery=''">
       <kbd style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);background:var(--bg-surface-raised);border:1px solid var(--border);border-radius:var(--radius-sm);padding:2px 6px;flex-shrink:0;">esc</kbd>
     </div>
@@ -1544,11 +1538,11 @@
     </div>
   </div>
 </div>
-</div><!-- end x-teleport -->
+</template><!-- end spotlight teleport -->
 
 <!-- New Conversation Modal -->
-<div x-teleport="body">
-<div x-show="showNewConv" x-cloak
+<template x-teleport="body">
+<div x-show="showNewConv"
   style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;"
   @click.self="showNewConv=false"
   @keydown.escape.window="showNewConv=false">
@@ -1582,7 +1576,7 @@
     </div>
   </div>
 </div>
-</div><!-- end new conv teleport -->
+</template><!-- end new conv teleport -->
 
 </div><!-- end Alpine root -->
 
