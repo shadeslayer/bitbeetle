@@ -278,6 +278,15 @@
     /* Hide Alpine x-cloak elements until Alpine is ready */
     [x-cloak] { display: none !important; }
 
+    /* Suppress hover-lift on dashboard page views (AI Agent / Reports / Contacts) */
+    .db-page-view .card:hover,
+    .db-page-view .stat-card:hover,
+    .db-page-view .pricing-card:hover,
+    .db-page-view .card-feature:hover {
+      transform: none !important;
+      box-shadow: var(--shadow-sm) !important;
+    }
+
     /* Scrollbar styling */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -777,7 +786,7 @@
   <!-- ═══════════════════════════════════════════════════
        AI AGENT PAGE
        ═══════════════════════════════════════════════════ -->
-  <div x-show="activeNav === 'ai'" style="height:100vh;overflow-y:auto;background:var(--bg);padding:var(--space-8) var(--space-10);">
+  <div x-show="activeNav === 'ai'" class="db-page-view" style="height:100vh;overflow-y:auto;background:var(--bg);padding:var(--space-8) var(--space-10);">
     <div style="max-width:960px;margin:0 auto;">
       <div style="margin-bottom:var(--space-8);">
         <div class="section-pill section-pill--blue" style="margin-bottom:var(--space-4);">FIN AI AGENT</div>
@@ -885,7 +894,7 @@
   <!-- ═══════════════════════════════════════════════════
        REPORTS PAGE
        ═══════════════════════════════════════════════════ -->
-  <div x-show="activeNav === 'reports'" style="height:100vh;overflow-y:auto;background:var(--bg);padding:var(--space-8) var(--space-10);">
+  <div x-show="activeNav === 'reports'" class="db-page-view" style="height:100vh;overflow-y:auto;background:var(--bg);padding:var(--space-8) var(--space-10);">
     <div style="max-width:960px;margin:0 auto;">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--space-8);">
         <div>
@@ -1015,7 +1024,7 @@
   <!-- ═══════════════════════════════════════════════════
        CONTACTS PAGE
        ═══════════════════════════════════════════════════ -->
-  <div x-show="activeNav === 'contacts'" style="height:100vh;overflow-y:auto;background:var(--bg);padding:var(--space-8) var(--space-10);">
+  <div x-show="activeNav === 'contacts'" class="db-page-view" style="height:100vh;overflow-y:auto;background:var(--bg);padding:var(--space-8) var(--space-10);">
     <div style="max-width:960px;margin:0 auto;">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--space-8);">
         <div>
@@ -1101,7 +1110,7 @@
      style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(7,7,15,0.72);backdrop-filter:blur(4px);">
 
   <!-- Modal card -->
-  <div style="background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius-xl);width:100%;max-width:520px;margin:var(--space-4);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.28);">
+  <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-xl);width:100%;max-width:520px;margin:var(--space-4);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.32);">
 
     <!-- Progress bar -->
     <div style="height:3px;background:var(--border-subtle);">
