@@ -171,7 +171,7 @@
     }
     .unread-dot {
       width: 8px; height: 8px; background: var(--accent);
-      border-radius: var(--radius-full); flex-shrink: 0;
+      border-radius: var(--radius-full); flex-shrink: 0; align-self: center;
     }
 
     /* Thread panel */
@@ -467,6 +467,7 @@
                 <div class="conv-card-name">
                   <span x-text="conv.contact.name + ' · ' + conv.company"></span>
                   <span style="display:flex;align-items:center;gap:var(--space-1);flex-shrink:0;">
+                    <svg x-show="conv.starred" width="10" height="10" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                     <div class="unread-dot" x-show="conv.unread"></div>
                     <span class="conv-card-time" x-text="conv.time"></span>
                   </span>
@@ -507,6 +508,7 @@
                     <div class="conv-card-name">
                       <span x-text="sidebarFilter === 'byCompany' ? conv.contact.name : conv.contact.name + ' · ' + conv.company"></span>
                       <span style="display:flex;align-items:center;gap:var(--space-1);flex-shrink:0;">
+                        <svg x-show="conv.starred" width="10" height="10" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                         <div class="unread-dot" x-show="conv.unread"></div>
                         <span class="conv-card-time" x-text="conv.time"></span>
                       </span>
@@ -553,8 +555,8 @@
           </div>
           <span class="badge badge-sm" :class="CHANNEL_COLORS[selectedConv.channel]" x-text="selectedConv.channel"></span>
           <span class="badge badge-sm" :class="STATUS_COLORS[selectedConv.status]" x-text="selectedConv.status"></span>
-          <button class="btn btn-ghost btn-sm" title="Star">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <button class="btn btn-ghost btn-sm" :title="selectedConv.starred ? 'Unstar' : 'Star'" @click="toggleStar()">
+            <svg width="14" height="14" :fill="selectedConv.starred ? '#f59e0b' : 'none'" :stroke="selectedConv.starred ? '#f59e0b' : 'currentColor'" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           </button>
           <template x-if="selectedConv.status !== 'Resolved'">
             <button class="btn btn-sm" style="background:var(--success);color:white;border-color:var(--success);" @click="closeConversation()">
@@ -1734,6 +1736,14 @@ function dashboard() {
         this.selectedConv.status = 'Resolved';
         const src = MOCK_CONVERSATIONS.find(c => c.id === this.selectedConv.id);
         if (src) src.status = 'Resolved';
+      }
+    },
+
+    toggleStar() {
+      if (this.selectedConv) {
+        this.selectedConv.starred = !this.selectedConv.starred;
+        const src = MOCK_CONVERSATIONS.find(c => c.id === this.selectedConv.id);
+        if (src) src.starred = this.selectedConv.starred;
       }
     },
 
