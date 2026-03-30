@@ -1278,7 +1278,7 @@
      ONBOARDING FLOW — multi-step modal overlay
      ═══════════════════════════════════════════════════════════ -->
 <div x-show="showOnboarding" x-cloak
-     style="position:fixed;inset:0;z-index:9999;background:rgba(7,7,15,0.72);backdrop-filter:blur(4px);">
+     style="position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;z-index:9999;background:rgba(7,7,15,0.72);backdrop-filter:blur(4px);">
   <div class="onboarding-overlay-inner">
 
   <!-- Modal card -->
@@ -1502,7 +1502,7 @@
 <template x-teleport="body">
 <div x-show="showSpotlight"
   x-effect="if(showSpotlight) $nextTick(()=>{ const el=document.getElementById('spotlightInput'); if(el) el.focus(); })"
-  style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;"
+  style="position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;"
   @click.self="showSpotlight=false;spotlightQuery=''">
   <div style="width:580px;max-width:calc(100vw - 32px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.3);">
     <!-- Input row -->
@@ -1547,7 +1547,7 @@
 <!-- New Conversation Modal -->
 <template x-teleport="body">
 <div x-show="showNewConv"
-  style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;"
+  style="position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;"
   @click.self="showNewConv=false"
   @keydown.escape.window="showNewConv=false">
   <div style="width:520px;max-width:calc(100vw - 32px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.3);">
