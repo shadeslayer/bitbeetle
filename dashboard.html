@@ -315,7 +315,10 @@
   </style>
 </head>
 <body>
-<div x-data="dashboard()" x-init="init()" :data-theme="theme">
+<div x-data="dashboard()" x-init="init()" :data-theme="theme"
+  @keydown.window="if($event.key==='k'&&($event.metaKey||$event.ctrlKey)){$event.preventDefault();showSpotlight=true;$nextTick(()=>$refs.spotlightInput&&$refs.spotlightInput.focus())}"
+  @keydown.escape.window="showSpotlight=false"
+>
 
 <div class="db-layout" :class="{ 'nav-fullpage': activeNav !== 'inbox' }">
 
@@ -339,7 +342,7 @@
 
     <div class="nav-spacer"></div>
 
-    <button class="nav-icon-btn" title="Search">
+    <button class="nav-icon-btn" :class="{ active: showSpotlight }" title="Search (⌘K)" @click="showSpotlight=true;$nextTick(()=>$refs.spotlightInput&&$refs.spotlightInput.focus())">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
     <button class="nav-icon-btn" title="Settings" @click="onboardingStep=1; showOnboarding=true">
@@ -898,33 +901,52 @@
             <span class="badge badge-success"><span class="badge-dot"></span>Active</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:var(--space-4);">
+            <!-- Model dropdown -->
             <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-3);background:var(--bg-surface);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
               <div>
                 <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Model</div>
-                <div style="font-size:var(--text-xs);color:var(--text-muted);">claude-haiku-4-5 via OpenRouter</div>
+                <div style="font-size:var(--text-xs);color:var(--text-muted);">via OpenRouter</div>
               </div>
-              <span class="badge badge-blue">Active</span>
+              <select x-model="agentModel" class="select" style="width:auto;font-size:var(--text-xs);height:30px;padding:0 var(--space-3);">
+                <option value="anthropic/claude-haiku-4-5">Claude Haiku 4.5</option>
+                <option value="anthropic/claude-sonnet-4-5">Claude Sonnet 4.5</option>
+                <option value="anthropic/claude-opus-4">Claude Opus 4</option>
+                <option value="openai/gpt-4o-mini">GPT-4o mini</option>
+                <option value="openai/gpt-4o">GPT-4o</option>
+              </select>
             </div>
+            <!-- Auto-respond toggle -->
             <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-3);background:var(--bg-surface);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
               <div>
                 <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Auto-respond</div>
                 <div style="font-size:var(--text-xs);color:var(--text-muted);">Replies at first contact</div>
               </div>
-              <div style="width:36px;height:20px;background:var(--success);border-radius:var(--radius-full);position:relative;cursor:pointer;"><div style="position:absolute;top:2px;right:2px;width:16px;height:16px;background:white;border-radius:50%;"></div></div>
+              <div @click="agentAutoRespond=!agentAutoRespond"
+                :style="`width:36px;height:20px;background:${agentAutoRespond?'var(--success)':'var(--border)'};border-radius:var(--radius-full);position:relative;cursor:pointer;transition:background 0.2s;`">
+                <div :style="`position:absolute;top:2px;${agentAutoRespond?'right:2px':'left:2px'};width:16px;height:16px;background:white;border-radius:50%;transition:left 0.2s,right 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);`"></div>
+              </div>
             </div>
+            <!-- Knowledge base toggle -->
             <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-3);background:var(--bg-surface);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
               <div>
                 <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Knowledge base</div>
                 <div style="font-size:var(--text-xs);color:var(--text-muted);">Docs + code repo indexed</div>
               </div>
-              <div style="width:36px;height:20px;background:var(--success);border-radius:var(--radius-full);position:relative;cursor:pointer;"><div style="position:absolute;top:2px;right:2px;width:16px;height:16px;background:white;border-radius:50%;"></div></div>
+              <div @click="agentKnowledgeBase=!agentKnowledgeBase"
+                :style="`width:36px;height:20px;background:${agentKnowledgeBase?'var(--success)':'var(--border)'};border-radius:var(--radius-full);position:relative;cursor:pointer;transition:background 0.2s;`">
+                <div :style="`position:absolute;top:2px;${agentKnowledgeBase?'right:2px':'left:2px'};width:16px;height:16px;background:white;border-radius:50%;transition:left 0.2s,right 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);`"></div>
+              </div>
             </div>
+            <!-- Copilot suggestions toggle -->
             <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-3);background:var(--bg-surface);border-radius:var(--radius-md);border:1px solid var(--border-subtle);">
               <div>
                 <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Copilot suggestions</div>
                 <div style="font-size:var(--text-xs);color:var(--text-muted);">Drafts replies for agents</div>
               </div>
-              <div style="width:36px;height:20px;background:var(--success);border-radius:var(--radius-full);position:relative;cursor:pointer;"><div style="position:absolute;top:2px;right:2px;width:16px;height:16px;background:white;border-radius:50%;"></div></div>
+              <div @click="agentCopilot=!agentCopilot"
+                :style="`width:36px;height:20px;background:${agentCopilot?'var(--success)':'var(--border)'};border-radius:var(--radius-full);position:relative;cursor:pointer;transition:background 0.2s;`">
+                <div :style="`position:absolute;top:2px;${agentCopilot?'right:2px':'left:2px'};width:16px;height:16px;background:white;border-radius:50%;transition:left 0.2s,right 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);`"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -1399,6 +1421,49 @@
 </div>
 <!-- end onboarding -->
 
+<!-- Spotlight Search -->
+<div x-show="showSpotlight" x-cloak
+  style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;"
+  @click.self="showSpotlight=false;spotlightQuery=''">
+  <div style="width:580px;max-width:calc(100vw - 32px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.3);">
+    <!-- Input row -->
+    <div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--border);">
+      <svg style="color:var(--text-muted);flex-shrink:0;" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input x-ref="spotlightInput" x-model="spotlightQuery" type="text" placeholder="Search conversations…"
+        style="flex:1;background:transparent;border:none;outline:none;font-family:var(--font-sans);font-size:var(--text-base);color:var(--text-primary);"
+        @keydown.escape.stop="showSpotlight=false;spotlightQuery=''">
+      <kbd style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);background:var(--bg-surface-raised);border:1px solid var(--border);border-radius:var(--radius-sm);padding:2px 6px;flex-shrink:0;">esc</kbd>
+    </div>
+    <!-- Results -->
+    <div style="max-height:420px;overflow-y:auto;">
+      <template x-if="!spotlightQuery.trim()">
+        <div style="padding:var(--space-8) var(--space-5);text-align:center;color:var(--text-muted);font-size:var(--text-sm);">Type to search conversations…</div>
+      </template>
+      <template x-if="spotlightQuery.trim() && spotlightResults().length === 0">
+        <div style="padding:var(--space-8) var(--space-5);text-align:center;color:var(--text-muted);font-size:var(--text-sm);">No conversations found for "<span x-text="spotlightQuery"></span>"</div>
+      </template>
+      <template x-for="conv in spotlightResults()" :key="conv.id">
+        <div @click="selectConversation(conv);showSpotlight=false;spotlightQuery='';activeNav='inbox'"
+          style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-5);cursor:pointer;transition:background var(--duration-fast);border-bottom:1px solid var(--border-subtle);"
+          @mouseenter="$el.style.background='var(--bg-surface-raised)'"
+          @mouseleave="$el.style.background=''">
+          <div class="avatar avatar-sm" :style="`background:${conv.contact.color};flex-shrink:0;`">
+            <span x-text="conv.contact.initials" style="font-size:10px;"></span>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" x-text="conv.contact.name + ' · ' + conv.company"></div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" x-text="conv.preview"></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-2);flex-shrink:0;">
+            <span class="badge badge-sm" :class="CHANNEL_COLORS[conv.channel]" x-text="conv.channel"></span>
+            <span class="badge badge-sm" :class="STATUS_COLORS[conv.status]" x-text="conv.status"></span>
+          </div>
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+
 </div><!-- end Alpine root -->
 
 <script>
@@ -1410,6 +1475,12 @@ function dashboard() {
     sidebarFilter: 'all',
     convFilter: 'all',
     searchQuery: '',
+    showSpotlight: false,
+    spotlightQuery: '',
+    agentModel: 'anthropic/claude-haiku-4-5',
+    agentAutoRespond: true,
+    agentKnowledgeBase: true,
+    agentCopilot: true,
     selectedConv: null,
     rightTab: 'details',
     composeTab: 'reply',
@@ -1477,6 +1548,17 @@ function dashboard() {
       return list;
     },
 
+    spotlightResults() {
+      if (!this.spotlightQuery.trim()) return [];
+      const q = this.spotlightQuery.toLowerCase();
+      return MOCK_CONVERSATIONS.filter(c =>
+        c.contact.name.toLowerCase().includes(q) ||
+        c.company.toLowerCase().includes(q) ||
+        c.preview.toLowerCase().includes(q) ||
+        c.id.toLowerCase().includes(q)
+      );
+    },
+
     groupedConversations() {
       const key = this.sidebarFilter === 'byCompany' ? 'company' : 'channel';
       let list = MOCK_CONVERSATIONS;
@@ -1535,6 +1617,10 @@ function dashboard() {
     },
 
     selectConversation(conv) {
+      // Mark as read in source data so the dot disappears in the list
+      const src = MOCK_CONVERSATIONS.find(c => c.id === conv.id);
+      if (src) src.unread = false;
+      conv.unread = false;
       this.selectedConv = { ...conv, messages: [...conv.messages] };
       this.composeText = '';
       this.composeTab = 'reply';
