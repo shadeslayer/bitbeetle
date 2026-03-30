@@ -51,28 +51,62 @@
 
     /* Icon nav */
     .db-icon-nav {
+      position: relative;
+      overflow: visible;
+    }
+    .db-icon-nav-inner {
+      position: absolute;
+      left: 0; top: 0; height: 100%;
+      width: 48px;
+      overflow: hidden;
       background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: var(--space-3) 0;
+      align-items: stretch;
+      padding: var(--space-3) 6px;
       gap: var(--space-1);
-      border-right: 1px solid var(--border-subtle);
+      z-index: 100;
+      transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s;
+    }
+    .db-icon-nav-inner:hover {
+      width: 200px;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.12);
     }
     .db-icon-nav .nav-icon-btn {
-      width: 36px; height: 36px;
+      height: 36px;
+      width: 100%;
       border-radius: var(--radius-md);
       border: none;
       background: transparent;
       color: var(--text-muted);
       cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+      display: flex; align-items: center; justify-content: flex-start;
+      gap: 0; padding: 0;
       transition: background var(--duration-fast), color var(--duration-fast);
       position: relative;
+      flex-shrink: 0;
     }
     .db-icon-nav .nav-icon-btn:hover { background: var(--border-subtle); color: var(--text-primary); }
     .db-icon-nav .nav-icon-btn.active { background: var(--border-subtle); color: var(--accent); }
     .db-icon-nav .nav-spacer { flex: 1; }
+    .nav-icon-icon {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .nav-icon-label {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      max-width: 0;
+      overflow: hidden;
+      transition: opacity 0.12s, max-width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--text-primary);
+    }
+    .db-icon-nav-inner:hover .nav-icon-label { opacity: 1; max-width: 160px; }
 
     /* Sidebar */
     .db-sidebar { background: var(--bg-surface); padding: 0; }
@@ -324,44 +358,55 @@
 
   <!-- Panel 1: Icon Nav -->
   <div class="db-icon-nav">
-    <a href="index.html" style="text-decoration:none;margin-bottom:var(--space-2);" title="Home">
-      <div style="font-size:1.3rem;line-height:1;padding:4px;">🪲</div>
+   <div class="db-icon-nav-inner">
+    <a href="index.html" style="text-decoration:none;display:flex;align-items:center;margin-bottom:var(--space-1);flex-shrink:0;" title="Home">
+      <span class="nav-icon-icon" style="font-size:1.3rem;line-height:1;">🪲</span>
+      <span class="nav-icon-label" style="font-weight:800;letter-spacing:-0.02em;font-size:var(--text-sm);">BitBeetle</span>
     </a>
-    <button class="nav-icon-btn" :class="{ active: showSpotlight }" title="Search (⌘K)" @click="showSpotlight=true;$nextTick(()=>$refs.spotlightInput&&$refs.spotlightInput.focus())">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <button class="nav-icon-btn" :class="{ active: showSpotlight }" title="Search (⌘K)" @click="showSpotlight=true">
+      <span class="nav-icon-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+      <span class="nav-icon-label">Search</span>
     </button>
     <button class="nav-icon-btn" :class="{ active: activeNav === 'inbox' }" @click="activeNav='inbox'" title="Inbox">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <span class="nav-icon-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+      <span class="nav-icon-label">Inbox</span>
     </button>
     <button class="nav-icon-btn" :class="{ active: activeNav === 'ai' }" @click="activeNav='ai'" title="AI Agent">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span class="nav-icon-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+      <span class="nav-icon-label">AI Agent</span>
     </button>
     <button class="nav-icon-btn" :class="{ active: activeNav === 'reports' }" @click="activeNav='reports'" title="Reports">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span class="nav-icon-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+      <span class="nav-icon-label">Reports</span>
     </button>
     <button class="nav-icon-btn" :class="{ active: activeNav === 'contacts' }" @click="activeNav='contacts'" title="Contacts">
-      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span class="nav-icon-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      <span class="nav-icon-label">Contacts</span>
     </button>
 
     <div class="nav-spacer"></div>
 
     <button class="nav-icon-btn" title="Settings" @click="onboardingStep=1; showOnboarding=true">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+      <span class="nav-icon-icon"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg></span>
+      <span class="nav-icon-label">Settings</span>
     </button>
     <button class="nav-icon-btn" @click="toggleTheme()" :title="theme === 'dark' ? 'Light mode' : 'Dark mode'">
-      <template x-if="theme === 'light'">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </template>
-      <template x-if="theme === 'dark'">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      </template>
+      <span class="nav-icon-icon">
+        <template x-if="theme === 'light'"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></template>
+        <template x-if="theme === 'dark'"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></template>
+      </span>
+      <span class="nav-icon-label" x-text="theme === 'dark' ? 'Light mode' : 'Dark mode'"></span>
     </button>
-    <div style="position:relative;margin-top:var(--space-2);" @click="bbLogout()">
-      <div class="avatar avatar-sm" :style="`background:var(--accent);cursor:pointer;`" :title="session?.name">
-        <span x-text="session?.initials || 'RG'"></span>
-        <div class="presence presence-online"></div>
-      </div>
+    <div style="display:flex;align-items:center;cursor:pointer;flex-shrink:0;border-radius:var(--radius-md);padding:2px 0;margin-top:var(--space-1);" @click="bbLogout()" :title="session?.name">
+      <span class="nav-icon-icon">
+        <div class="avatar avatar-sm" style="background:var(--accent);">
+          <span x-text="session?.initials || 'RG'"></span>
+          <div class="presence presence-online"></div>
+        </div>
+      </span>
+      <span class="nav-icon-label" style="font-size:var(--text-xs);" x-text="session?.name || 'Rohan Garg'"></span>
     </div>
+   </div><!-- end db-icon-nav-inner -->
   </div>
 
   <!-- Panel 2: Sidebar -->
@@ -433,12 +478,42 @@
     <div class="db-conv-header">
       <span style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);" x-text="{ all:'All Conversations', mine:'Your Inbox', mentions:'Mentions', created:'Created by You', unassigned:'Unassigned', ai:'AI Handling', escalated:'Escalated', resolved:'Resolved', byCompany:'By Company', byChannel:'By Channel' }[sidebarFilter] || 'All Conversations'"></span>
       <div style="display:flex;gap:var(--space-2);">
-        <button class="nav-icon-btn" style="width:28px;height:28px;" title="Filter">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-        </button>
-        <button class="nav-icon-btn" style="width:28px;height:28px;" title="Sort">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
-        </button>
+        <!-- Filter dropdown -->
+        <div style="position:relative;">
+          <button class="nav-icon-btn" style="width:28px;height:28px;" :style="convFilter!=='all'?'color:var(--accent);background:var(--blue-lightest);':''" title="Filter" @click="filterDropdown=!filterDropdown;sortDropdown=false">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          </button>
+          <div x-show="filterDropdown" @click.away="filterDropdown=false" x-cloak
+            style="position:absolute;right:0;top:calc(100% + 4px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:160px;z-index:50;overflow:hidden;">
+            <template x-for="opt in [{val:'all',label:'All statuses'},{val:'Open',label:'Open'},{val:'AI Handling',label:'AI Handling'},{val:'Escalated',label:'Escalated'},{val:'Resolved',label:'Resolved'}]" :key="opt.val">
+              <button @click="convFilter=opt.val;filterDropdown=false"
+                :style="convFilter===opt.val?'background:var(--blue-lightest);color:var(--accent);font-weight:600;':''"
+                style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:var(--space-2) var(--space-4);font-size:var(--text-sm);font-family:var(--font-sans);background:transparent;border:none;cursor:pointer;color:var(--text-primary);"
+                @mouseenter="$el.style.background='var(--bg-surface-raised)'" @mouseleave="$el.style.background=convFilter===$el.dataset.val?'var(--blue-lightest)':''">
+                <span x-text="opt.label"></span>
+                <svg x-show="convFilter===opt.val" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </template>
+          </div>
+        </div>
+        <!-- Sort dropdown -->
+        <div style="position:relative;">
+          <button class="nav-icon-btn" style="width:28px;height:28px;" :style="sortOrder!=='newest'?'color:var(--accent);background:var(--blue-lightest);':''" title="Sort" @click="sortDropdown=!sortDropdown;filterDropdown=false">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          </button>
+          <div x-show="sortDropdown" @click.away="sortDropdown=false" x-cloak
+            style="position:absolute;right:0;top:calc(100% + 4px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:0 8px 24px rgba(0,0,0,0.12);min-width:160px;z-index:50;overflow:hidden;">
+            <template x-for="opt in [{val:'newest',label:'Newest first'},{val:'oldest',label:'Oldest first'},{val:'name',label:'Name A–Z'},{val:'company',label:'Company A–Z'}]" :key="opt.val">
+              <button @click="sortOrder=opt.val;sortDropdown=false"
+                :style="sortOrder===opt.val?'background:var(--blue-lightest);color:var(--accent);font-weight:600;':''"
+                style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:var(--space-2) var(--space-4);font-size:var(--text-sm);font-family:var(--font-sans);background:transparent;border:none;cursor:pointer;color:var(--text-primary);"
+                @mouseenter="$el.style.background='var(--bg-surface-raised)'" @mouseleave="$el.style.background=''">
+                <span x-text="opt.label"></span>
+                <svg x-show="sortOrder===opt.val" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+              </button>
+            </template>
+          </div>
+        </div>
       </div>
     </div>
     <div class="conv-filter-tabs">
@@ -958,7 +1033,7 @@
         <div class="card">
           <div class="card-title" style="margin-bottom:var(--space-5);">Recent AI activity</div>
           <div style="display:flex;flex-direction:column;gap:var(--space-3);">
-            <template x-for="conv in MOCK_CONVERSATIONS.filter(c => c.status === 'AI Handling' || c.messages.some(m => m.type === 'ai')).slice(0,5)" :key="conv.id">
+            <template x-for="conv in this.conversations.filter(c => c.status === 'AI Handling' || c.messages.some(m => m.type === 'ai')).slice(0,5)" :key="conv.id">
               <div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) 0;border-bottom:1px solid var(--border-subtle);">
                 <div class="avatar avatar-sm" :style="`background:${conv.contact.color};`" style="font-size:10px;flex-shrink:0;">
                   <span x-text="conv.contact.initials"></span>
@@ -1158,7 +1233,7 @@
             </tr>
           </thead>
           <tbody>
-            <template x-for="conv in MOCK_CONVERSATIONS" :key="conv.id">
+            <template x-for="conv in conversations" :key="conv.id">
               <tr
                 style="border-bottom:1px solid var(--border-subtle);cursor:pointer;transition:background var(--duration-fast);"
                 @click="activeNav='inbox'; selectConversation(conv)"
@@ -1436,6 +1511,7 @@
       <svg style="color:var(--text-muted);flex-shrink:0;" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input x-ref="spotlightInput" x-model="spotlightQuery" type="text" placeholder="Search conversations…"
         style="flex:1;background:transparent;border:none;outline:none;font-family:var(--font-sans);font-size:var(--text-base);color:var(--text-primary);"
+        x-effect="if(showSpotlight) $nextTick(()=>$el.focus())"
         @keydown.escape.stop="showSpotlight=false;spotlightQuery=''">
       <kbd style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);background:var(--bg-surface-raised);border:1px solid var(--border);border-radius:var(--radius-sm);padding:2px 6px;flex-shrink:0;">esc</kbd>
     </div>
@@ -1516,8 +1592,12 @@ function dashboard() {
     session: null,
     theme: localStorage.getItem('bb_theme') || 'light',
     activeNav: 'inbox',
+    conversations: MOCK_CONVERSATIONS,
     sidebarFilter: 'all',
     convFilter: 'all',
+    sortOrder: 'newest',
+    filterDropdown: false,
+    sortDropdown: false,
     searchQuery: '',
     showSpotlight: false,
     spotlightQuery: '',
@@ -1560,7 +1640,7 @@ function dashboard() {
 
     filteredConversations() {
       const email = this.session?.email || 'admin@bitbeetle.com';
-      let list = MOCK_CONVERSATIONS;
+      let list = this.conversations;
       // sidebar filter
       if (this.sidebarFilter === 'mine') {
         list = list.filter(c => c.assignedTo === email);
@@ -1591,13 +1671,19 @@ function dashboard() {
           c.id.toLowerCase().includes(q)
         );
       }
+      // sorting
+      list = [...list];
+      if (this.sortOrder === 'oldest') list.reverse();
+      else if (this.sortOrder === 'name') list.sort((a, b) => a.contact.name.localeCompare(b.contact.name));
+      else if (this.sortOrder === 'company') list.sort((a, b) => a.company.localeCompare(b.company));
+      // 'newest' keeps insertion order (most recent first by default)
       return list;
     },
 
     spotlightResults() {
       if (!this.spotlightQuery.trim()) return [];
       const q = this.spotlightQuery.toLowerCase();
-      return MOCK_CONVERSATIONS.filter(c =>
+      return this.conversations.filter(c =>
         c.contact.name.toLowerCase().includes(q) ||
         c.company.toLowerCase().includes(q) ||
         c.preview.toLowerCase().includes(q) ||
@@ -1607,7 +1693,7 @@ function dashboard() {
 
     groupedConversations() {
       const key = this.sidebarFilter === 'byCompany' ? 'company' : 'channel';
-      let list = MOCK_CONVERSATIONS;
+      let list = this.conversations;
       if (this.convFilter !== 'all') list = list.filter(c => c.status === this.convFilter);
       if (this.searchQuery.trim()) {
         const q = this.searchQuery.toLowerCase();
@@ -1629,17 +1715,20 @@ function dashboard() {
 
     sidebarCount(filter) {
       const email = this.session?.email || 'admin@bitbeetle.com';
-      const counts = {
-        mine: MOCK_CONVERSATIONS.filter(c => c.assignedTo === email).length,
-        mentions: 0,
-        created: MOCK_CONVERSATIONS.filter(c => c.createdBy === email).length,
-        all: MOCK_CONVERSATIONS.length,
-        unassigned: MOCK_CONVERSATIONS.filter(c => !c.assignedTo).length,
-        ai: MOCK_CONVERSATIONS.filter(c => c.status === 'AI Handling').length,
-        escalated: MOCK_CONVERSATIONS.filter(c => c.status === 'Escalated').length,
-        resolved: MOCK_CONVERSATIONS.filter(c => c.status === 'Resolved').length,
+      const unread = c => c.unread;
+      const sets = {
+        mine:       this.conversations.filter(c => c.assignedTo === email),
+        mentions:   [],
+        created:    this.conversations.filter(c => c.createdBy === email),
+        all:        this.conversations,
+        unassigned: this.conversations.filter(c => !c.assignedTo),
+        ai:         this.conversations.filter(c => c.status === 'AI Handling'),
+        escalated:  this.conversations.filter(c => c.status === 'Escalated'),
+        resolved:   this.conversations.filter(c => c.status === 'Resolved'),
       };
-      return counts[filter] || 0;
+      const set = sets[filter] || [];
+      const count = set.filter(unread).length;
+      return count > 0 ? count : '';
     },
 
     dismissOnboarding() {
@@ -1664,7 +1753,7 @@ function dashboard() {
 
     selectConversation(conv) {
       // Mark as read in source data so the dot disappears in the list
-      const src = MOCK_CONVERSATIONS.find(c => c.id === conv.id);
+      const src = this.conversations.find(c => c.id === conv.id);
       if (src) src.unread = false;
       conv.unread = false;
       this.selectedConv = { ...conv, messages: [...conv.messages] };
@@ -1770,7 +1859,7 @@ function dashboard() {
     closeConversation() {
       if (this.selectedConv) {
         this.selectedConv.status = 'Resolved';
-        const src = MOCK_CONVERSATIONS.find(c => c.id === this.selectedConv.id);
+        const src = this.conversations.find(c => c.id === this.selectedConv.id);
         if (src) src.status = 'Resolved';
       }
     },
@@ -1778,7 +1867,7 @@ function dashboard() {
     createConversation() {
       const initials = this.newConvForm.to.split('@')[0].slice(0, 2).toUpperCase();
       const newConv = {
-        id: 'BB-' + String(MOCK_CONVERSATIONS.length + 1).padStart(5, '0'),
+        id: 'BB-' + String(this.conversations.length + 1).padStart(5, '0'),
         contact: { name: this.newConvForm.to.split('@')[0], initials, email: this.newConvForm.to, role: 'Customer', color: '#6366f1' },
         company: this.newConvForm.to.split('@')[1]?.split('.')[0] || 'Unknown',
         plan: 'Free',
@@ -1793,7 +1882,7 @@ function dashboard() {
         topics: [],
         messages: [{ id: 1, role: 'assistant', type: 'agent', content: this.newConvForm.message, time: 'Just now' }]
       };
-      MOCK_CONVERSATIONS.unshift(newConv);
+      this.conversations.unshift(newConv);
       this.showNewConv = false;
       this.selectConversation(newConv);
       this.activeNav = 'inbox';
@@ -1802,7 +1891,7 @@ function dashboard() {
     toggleStar() {
       if (this.selectedConv) {
         this.selectedConv.starred = !this.selectedConv.starred;
-        const src = MOCK_CONVERSATIONS.find(c => c.id === this.selectedConv.id);
+        const src = this.conversations.find(c => c.id === this.selectedConv.id);
         if (src) src.starred = this.selectedConv.starred;
       }
     },
@@ -1810,7 +1899,7 @@ function dashboard() {
     reopenConversation() {
       if (this.selectedConv) {
         this.selectedConv.status = 'Open';
-        const src = MOCK_CONVERSATIONS.find(c => c.id === this.selectedConv.id);
+        const src = this.conversations.find(c => c.id === this.selectedConv.id);
         if (src) src.status = 'Open';
       }
     },
