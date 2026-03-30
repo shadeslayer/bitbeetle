@@ -327,6 +327,9 @@
     <a href="index.html" style="text-decoration:none;margin-bottom:var(--space-2);" title="Home">
       <div style="font-size:1.3rem;line-height:1;padding:4px;">🪲</div>
     </a>
+    <button class="nav-icon-btn" :class="{ active: showSpotlight }" title="Search (⌘K)" @click="showSpotlight=true;$nextTick(()=>$refs.spotlightInput&&$refs.spotlightInput.focus())">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
     <button class="nav-icon-btn" :class="{ active: activeNav === 'inbox' }" @click="activeNav='inbox'" title="Inbox">
       <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
     </button>
@@ -342,9 +345,6 @@
 
     <div class="nav-spacer"></div>
 
-    <button class="nav-icon-btn" :class="{ active: showSpotlight }" title="Search (⌘K)" @click="showSpotlight=true;$nextTick(()=>$refs.spotlightInput&&$refs.spotlightInput.focus())">
-      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </button>
     <button class="nav-icon-btn" title="Settings" @click="onboardingStep=1; showOnboarding=true">
       <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
     </button>
@@ -368,17 +368,11 @@
   <div class="db-panel db-sidebar" x-show="activeNav === 'inbox'">
     <div class="db-sidebar-header">
       <div class="db-sidebar-title">Inbox</div>
-      <button class="nav-icon-btn" style="width:28px;height:28px;" title="New conversation">
+      <button class="nav-icon-btn" style="width:28px;height:28px;" title="New conversation" @click="showNewConv=true;newConvForm={to:'',subject:'',message:''}">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       </button>
     </div>
 
-    <div style="padding:var(--space-3) var(--space-4);">
-      <div style="position:relative;">
-        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="input" type="search" placeholder="Search conversations…" style="padding-left:32px;font-size:var(--text-sm);height:34px;" x-model="searchQuery" @input="selectedConv = null">
-      </div>
-    </div>
 
     <div class="sidebar-section-label">My Queue</div>
     <div class="sidebar-item" :class="{ active: sidebarFilter === 'mine' }" @click="sidebarFilter='mine'; convFilter='all'">
@@ -1432,6 +1426,7 @@
 <!-- end onboarding -->
 
 <!-- Spotlight Search -->
+<div x-teleport="body">
 <div x-show="showSpotlight" x-cloak
   style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;"
   @click.self="showSpotlight=false;spotlightQuery=''">
@@ -1473,6 +1468,45 @@
     </div>
   </div>
 </div>
+</div><!-- end x-teleport -->
+
+<!-- New Conversation Modal -->
+<div x-teleport="body">
+<div x-show="showNewConv" x-cloak
+  style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.45);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;"
+  @click.self="showNewConv=false"
+  @keydown.escape.window="showNewConv=false">
+  <div style="width:520px;max-width:calc(100vw - 32px);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.3);">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-5) var(--space-6);border-bottom:1px solid var(--border);">
+      <span style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);">New conversation</span>
+      <button class="btn btn-ghost btn-sm" style="width:28px;height:28px;padding:0;" @click="showNewConv=false">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div style="padding:var(--space-5) var(--space-6);display:flex;flex-direction:column;gap:var(--space-4);">
+      <div>
+        <label style="font-size:var(--text-xs);font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:var(--space-2);">To</label>
+        <input class="input" type="email" placeholder="customer@company.com" x-model="newConvForm.to" style="font-size:var(--text-sm);">
+      </div>
+      <div>
+        <label style="font-size:var(--text-xs);font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:var(--space-2);">Subject</label>
+        <input class="input" type="text" placeholder="Subject…" x-model="newConvForm.subject" style="font-size:var(--text-sm);">
+      </div>
+      <div>
+        <label style="font-size:var(--text-xs);font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;display:block;margin-bottom:var(--space-2);">Message</label>
+        <textarea class="input" rows="4" placeholder="Write your message…" x-model="newConvForm.message" style="font-size:var(--text-sm);resize:none;height:auto;"></textarea>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:var(--space-3);padding:var(--space-4) var(--space-6);border-top:1px solid var(--border);">
+      <button class="btn btn-ghost btn-sm" @click="showNewConv=false">Cancel</button>
+      <button class="btn btn-primary btn-sm" :disabled="!newConvForm.to.trim() || !newConvForm.subject.trim() || !newConvForm.message.trim()" @click="createConversation()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send
+      </button>
+    </div>
+  </div>
+</div>
+</div><!-- end new conv teleport -->
 
 </div><!-- end Alpine root -->
 
@@ -1487,6 +1521,8 @@ function dashboard() {
     searchQuery: '',
     showSpotlight: false,
     spotlightQuery: '',
+    showNewConv: false,
+    newConvForm: { to: '', subject: '', message: '' },
     agentModel: 'anthropic/claude-haiku-4-5',
     agentAutoRespond: true,
     agentKnowledgeBase: true,
@@ -1737,6 +1773,30 @@ function dashboard() {
         const src = MOCK_CONVERSATIONS.find(c => c.id === this.selectedConv.id);
         if (src) src.status = 'Resolved';
       }
+    },
+
+    createConversation() {
+      const initials = this.newConvForm.to.split('@')[0].slice(0, 2).toUpperCase();
+      const newConv = {
+        id: 'BB-' + String(MOCK_CONVERSATIONS.length + 1).padStart(5, '0'),
+        contact: { name: this.newConvForm.to.split('@')[0], initials, email: this.newConvForm.to, role: 'Customer', color: '#6366f1' },
+        company: this.newConvForm.to.split('@')[1]?.split('.')[0] || 'Unknown',
+        plan: 'Free',
+        status: 'Open',
+        channel: 'Email',
+        assignedTo: this.session?.email,
+        createdBy: this.session?.email,
+        sla: 'On track',
+        preview: this.newConvForm.message.slice(0, 60) + (this.newConvForm.message.length > 60 ? '…' : ''),
+        time: 'Just now',
+        unread: false,
+        topics: [],
+        messages: [{ id: 1, role: 'assistant', type: 'agent', content: this.newConvForm.message, time: 'Just now' }]
+      };
+      MOCK_CONVERSATIONS.unshift(newConv);
+      this.showNewConv = false;
+      this.selectConversation(newConv);
+      this.activeNav = 'inbox';
     },
 
     toggleStar() {

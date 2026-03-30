@@ -1065,6 +1065,8 @@
       border-radius: var(--radius-xl);
       font-size: var(--text-sm);
       line-height: 1.5;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
     .chat-msg-user {
       align-self: flex-end;
