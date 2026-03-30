@@ -278,8 +278,8 @@
     /* Hide Alpine x-cloak elements until Alpine is ready */
     [x-cloak] { display: none !important; }
 
-    /* Onboarding overlay — needs flex to stay on top of Alpine's display:block restore */
-    .onboarding-overlay { display: flex !important; align-items: center; justify-content: center; }
+    /* Onboarding overlay centering — on the inner wrapper, not the x-show element */
+    .onboarding-overlay-inner { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
 
     /* Onboarding option rows — layout in a class so Alpine :style can't overwrite display:flex */
     .onboarding-option {
@@ -1122,8 +1122,8 @@
      ONBOARDING FLOW — multi-step modal overlay
      ═══════════════════════════════════════════════════════════ -->
 <div x-show="showOnboarding" x-cloak
-     class="onboarding-overlay"
      style="position:fixed;inset:0;z-index:9999;background:rgba(7,7,15,0.72);backdrop-filter:blur(4px);">
+  <div class="onboarding-overlay-inner">
 
   <!-- Modal card -->
   <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-xl);width:100%;max-width:520px;margin:var(--space-4);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.32);">
@@ -1338,6 +1338,7 @@
     </div>
 
   </div>
+  </div><!-- end onboarding-overlay-inner -->
 </div>
 <!-- end onboarding -->
 
