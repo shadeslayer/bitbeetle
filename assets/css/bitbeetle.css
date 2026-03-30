@@ -252,12 +252,7 @@
       margin-bottom: var(--space-4);
     }
     .section-label::before {
-      content: '';
-      display: block;
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      flex-shrink: 0;
+      display: none;
     }
 
     .section-title {
@@ -672,10 +667,7 @@
       color: var(--pill-color);
     }
     .section-pill::before {
-      content: '';
-      display: block;
-      width: 8px; height: 8px;
-      background: var(--pill-color);
+      display: none;
     }
     /* Modifier classes — no inline hacks needed */
     .section-pill--orange { --pill-color: var(--orange); }
@@ -760,13 +752,8 @@
     /* Registration marks — Intercom corner dots motif */
     .bento::before,
     .bento::after {
-      content: '';
-      position: absolute;
-      width: 8px; height: 8px;
-      background: var(--accent);
+      display: none;
     }
-    .bento::before { top: var(--space-4); right: var(--space-4); }
-    .bento::after { bottom: var(--space-4); left: var(--space-4); }
 
     /* Feature card — Intercom editorial style */
     .card-feature {
@@ -788,12 +775,7 @@
     }
     /* Registration mark — top-right corner (Intercom signature) */
     .card-feature::after {
-      content: '';
-      position: absolute;
-      top: var(--space-4); right: var(--space-4);
-      width: 8px; height: 8px;
-      background: var(--accent);
-      opacity: 0.5;
+      display: none;
     }
     .card-feature-icon {
       width: 44px; height: 44px;
@@ -2017,10 +1999,7 @@
       color: var(--purple-light);
     }
     .section-pill-dark::before {
-      content: '';
-      display: block;
-      width: 8px; height: 8px;
-      background: var(--purple-light);
+      display: none;
     }
     /* Hero input — dark variant */
     .input-hero-wrap-dark {

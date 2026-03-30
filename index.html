@@ -32,7 +32,29 @@
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--space-12); }
     @media (max-width: 768px) {
       .footer-grid { grid-template-columns: 1fr 1fr; }
-      .hero-email-wrap { flex-direction: column; }
+      .hero-email-wrap {
+        flex-direction: column;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        gap: var(--space-3);
+        width: 100%;
+        max-width: 100%;
+      }
+      .hero-email-wrap .input-hero {
+        width: 100%;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-full);
+        padding: 0.75em 1.2em;
+        background: var(--bg-elevated);
+        box-shadow: var(--shadow-md);
+      }
+      .hero-email-wrap .btn {
+        width: 100%;
+        justify-content: center;
+        border-radius: var(--radius-full);
+      }
       .grid-3, .grid-4 { grid-template-columns: 1fr; }
       .bento-grid { grid-template-columns: 1fr !important; }
       .pricing-grid { grid-template-columns: 1fr !important; }
@@ -72,7 +94,7 @@
     </p>
     <div class="input-hero-wrap hero-email-wrap" style="margin:0 auto;justify-content:center;">
       <input class="input-hero" type="email" placeholder="your@company.com" style="min-width:240px;">
-      <a href="login.html" class="btn btn-primary">Start free <span class="arrow" style="background:rgba(255,255,255,0.2);width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-left:4px;">→</span></a>
+      <a href="login.html" class="btn btn-primary btn-pill">Start free <span class="arrow" style="background:rgba(255,255,255,0.2);width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;margin-left:4px;">→</span></a>
     </div>
     <p style="margin-top:var(--space-6);font-size:var(--text-sm);color:var(--text-muted);">
       Validated with CTOs at Coniq, Vip District, Signaturit, and Altima — no credit card required
