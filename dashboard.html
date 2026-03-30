@@ -204,8 +204,12 @@
       border-bottom: 1px solid var(--border);
     }
     .unread-dot {
-      width: 8px; height: 8px; background: var(--accent);
-      border-radius: var(--radius-full); flex-shrink: 0; align-self: center;
+      display: block;
+      width: 8px; height: 8px; min-width: 8px; min-height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin: auto 0;
     }
 
     /* Thread panel */
