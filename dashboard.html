@@ -1145,27 +1145,73 @@
       <h2 style="font-family:var(--font-serif);font-size:var(--text-xl);font-weight:700;color:var(--text-primary);text-align:center;margin-bottom:var(--space-2);">Connect your channels</h2>
       <p style="color:var(--text-muted);font-size:var(--text-sm);text-align:center;margin-bottom:var(--space-5);">Select which channels you want to route into BitBeetle. You can add more later.</p>
       <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-bottom:var(--space-6);">
-        <template x-for="ch in [
-          { id:'Email', icon:'📧', desc:'Support inbox via email' },
-          { id:'Slack', icon:'💬', desc:'Direct messages & shared channels' },
-          { id:'Teams', icon:'🟦', desc:'Microsoft Teams integration' },
-          { id:'Chat', icon:'🌐', desc:'Embeddable web chat widget' }
-        ]" :key="ch.id">
-          <div @click="toggleOnboardingChannel(ch.id)"
-               :class="onboardingData.channels.includes(ch.id) ? 'border-accent' : ''"
-               style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-4);border:2px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:border-color 0.15s,background 0.15s;"
-               :style="onboardingData.channels.includes(ch.id) ? 'border-color:var(--accent);background:var(--bg-elevated);' : 'border-color:var(--border);'">
-            <span style="font-size:1.25rem;" x-text="ch.icon"></span>
-            <div style="flex:1;">
-              <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);" x-text="ch.id"></div>
-              <div style="font-size:var(--text-xs);color:var(--text-muted);" x-text="ch.desc"></div>
-            </div>
-            <div style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all 0.15s;"
-                 :style="onboardingData.channels.includes(ch.id) ? 'background:var(--accent);border-color:var(--accent);' : ''">
-              <svg x-show="onboardingData.channels.includes(ch.id)" width="10" height="10" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
+        <!-- Email -->
+        <div @click="toggleOnboardingChannel('Email')"
+             style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4);border:2px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:border-color 0.15s,background 0.15s;"
+             :style="onboardingData.channels.includes('Email') ? 'border-color:var(--accent);background:var(--bg-surface);' : 'border-color:var(--border);'">
+          <div style="width:36px;height:36px;border-radius:var(--radius-md);background:#dbeafe;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" stroke="#2563eb" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
           </div>
-        </template>
+          <div style="flex:1;">
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Email</div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);">Support inbox via email</div>
+          </div>
+          <div style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;"
+               :style="onboardingData.channels.includes('Email') ? 'background:var(--accent);border-color:var(--accent);' : ''">
+            <svg x-show="onboardingData.channels.includes('Email')" width="10" height="10" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+
+        <!-- Slack -->
+        <div @click="toggleOnboardingChannel('Slack')"
+             style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4);border:2px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:border-color 0.15s,background 0.15s;"
+             :style="onboardingData.channels.includes('Slack') ? 'border-color:var(--accent);background:var(--bg-surface);' : 'border-color:var(--border);'">
+          <div style="width:36px;height:36px;border-radius:var(--radius-md);background:#fff7ed;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" stroke="#ea580c" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 8.25h15m-16.5 7.5h15m-1.8-13.5-3.9 19.5m-2.1-19.5-3.9 19.5"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Slack</div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);">Direct messages &amp; shared channels</div>
+          </div>
+          <div style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;"
+               :style="onboardingData.channels.includes('Slack') ? 'background:var(--accent);border-color:var(--accent);' : ''">
+            <svg x-show="onboardingData.channels.includes('Slack')" width="10" height="10" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+
+        <!-- Teams -->
+        <div @click="toggleOnboardingChannel('Teams')"
+             style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4);border:2px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:border-color 0.15s,background 0.15s;"
+             :style="onboardingData.channels.includes('Teams') ? 'border-color:var(--accent);background:var(--bg-surface);' : 'border-color:var(--border);'">
+          <div style="width:36px;height:36px;border-radius:var(--radius-md);background:#ede9fe;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" stroke="#7c3aed" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Teams</div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);">Microsoft Teams integration</div>
+          </div>
+          <div style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;"
+               :style="onboardingData.channels.includes('Teams') ? 'background:var(--accent);border-color:var(--accent);' : ''">
+            <svg x-show="onboardingData.channels.includes('Teams')" width="10" height="10" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+
+        <!-- Chat -->
+        <div @click="toggleOnboardingChannel('Chat')"
+             style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4);border:2px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:border-color 0.15s,background 0.15s;"
+             :style="onboardingData.channels.includes('Chat') ? 'border-color:var(--accent);background:var(--bg-surface);' : 'border-color:var(--border);'">
+          <div style="width:36px;height:36px;border-radius:var(--radius-md);background:#d1fae5;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" stroke="#059669" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Chat</div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);">Embeddable web chat widget</div>
+          </div>
+          <div style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;"
+               :style="onboardingData.channels.includes('Chat') ? 'background:var(--accent);border-color:var(--accent);' : ''">
+            <svg x-show="onboardingData.channels.includes('Chat')" width="10" height="10" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
       </div>
       <div style="display:flex;gap:var(--space-3);">
         <button class="btn btn-ghost btn-sm" style="flex:1;" @click="onboardingStep--">Back</button>
@@ -1182,25 +1228,56 @@
       <h2 style="font-family:var(--font-serif);font-size:var(--text-xl);font-weight:700;color:var(--text-primary);text-align:center;margin-bottom:var(--space-2);">Configure your AI agent</h2>
       <p style="color:var(--text-muted);font-size:var(--text-sm);text-align:center;margin-bottom:var(--space-5);">Choose how BitBeetle AI should handle incoming conversations.</p>
       <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-bottom:var(--space-6);">
-        <template x-for="mode in [
-          { id:'auto', title:'Auto-pilot', desc:'AI handles all conversations and escalates when needed', icon:'🤖' },
-          { id:'copilot', title:'Copilot', desc:'AI drafts replies for agents to review and send', icon:'✍️' },
-          { id:'off', title:'Manual only', desc:'Agents handle everything, AI assists on request', icon:'🧑‍💻' }
-        ]" :key="mode.id">
-          <div @click="onboardingData.aiMode = mode.id"
-               style="display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) var(--space-4);border:2px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:border-color 0.15s,background 0.15s;"
-               :style="onboardingData.aiMode === mode.id ? 'border-color:var(--accent);background:var(--bg-elevated);' : 'border-color:var(--border);'">
-            <span style="font-size:1.25rem;margin-top:1px;" x-text="mode.icon"></span>
-            <div style="flex:1;">
-              <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);margin-bottom:2px;" x-text="mode.title"></div>
-              <div style="font-size:var(--text-xs);color:var(--text-muted);line-height:1.5;" x-text="mode.desc"></div>
-            </div>
-            <div style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all 0.15s;"
-                 :style="onboardingData.aiMode === mode.id ? 'background:var(--accent);border-color:var(--accent);' : ''">
-              <svg x-show="onboardingData.aiMode === mode.id" width="10" height="10" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
+        <!-- Auto-pilot -->
+        <div @click="onboardingData.aiMode = 'auto'"
+             style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4);border:2px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:border-color 0.15s,background 0.15s;"
+             :style="onboardingData.aiMode === 'auto' ? 'border-color:var(--accent);background:var(--bg-surface);' : 'border-color:var(--border);'">
+          <div style="width:36px;height:36px;border-radius:var(--radius-md);background:#ede9fe;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" stroke="#7c3aed" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"/></svg>
           </div>
-        </template>
+          <div style="flex:1;">
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Auto-pilot</div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);line-height:1.5;">AI handles all conversations and escalates when needed</div>
+          </div>
+          <div style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;"
+               :style="onboardingData.aiMode === 'auto' ? 'background:var(--accent);border-color:var(--accent);' : ''">
+            <svg x-show="onboardingData.aiMode === 'auto'" width="10" height="10" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+
+        <!-- Copilot -->
+        <div @click="onboardingData.aiMode = 'copilot'"
+             style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4);border:2px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:border-color 0.15s,background 0.15s;"
+             :style="onboardingData.aiMode === 'copilot' ? 'border-color:var(--accent);background:var(--bg-surface);' : 'border-color:var(--border);'">
+          <div style="width:36px;height:36px;border-radius:var(--radius-md);background:#dbeafe;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" stroke="#2563eb" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Copilot</div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);line-height:1.5;">AI drafts replies for agents to review and send</div>
+          </div>
+          <div style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;"
+               :style="onboardingData.aiMode === 'copilot' ? 'background:var(--accent);border-color:var(--accent);' : ''">
+            <svg x-show="onboardingData.aiMode === 'copilot'" width="10" height="10" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
+
+        <!-- Manual only -->
+        <div @click="onboardingData.aiMode = 'off'"
+             style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) var(--space-4);border:2px solid var(--border);border-radius:var(--radius-lg);cursor:pointer;transition:border-color 0.15s,background 0.15s;"
+             :style="onboardingData.aiMode === 'off' ? 'border-color:var(--accent);background:var(--bg-surface);' : 'border-color:var(--border);'">
+          <div style="width:36px;height:36px;border-radius:var(--radius-md);background:#f3f4f6;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="18" height="18" fill="none" stroke="#4b5563" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Manual only</div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);line-height:1.5;">Agents handle everything, AI assists on request</div>
+          </div>
+          <div style="width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;"
+               :style="onboardingData.aiMode === 'off' ? 'background:var(--accent);border-color:var(--accent);' : ''">
+            <svg x-show="onboardingData.aiMode === 'off'" width="10" height="10" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+        </div>
       </div>
       <div style="display:flex;gap:var(--space-3);">
         <button class="btn btn-ghost btn-sm" style="flex:1;" @click="onboardingStep--">Back</button>
