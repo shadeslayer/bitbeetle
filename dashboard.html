@@ -501,7 +501,7 @@
   <div class="db-icon-nav">
    <div class="db-icon-nav-inner">
     <a href="index.html" style="text-decoration:none;display:flex;align-items:center;margin-bottom:var(--space-1);flex-shrink:0;" title="Home">
-      <span class="nav-icon-icon" style="font-size:1.3rem;line-height:1;">🪲</span>
+      <span class="nav-icon-icon" style="line-height:1;display:flex;align-items:center;"><img src="assets/images/logo.svg" alt="BitBeetle" style="height:22px;width:auto;display:block;"></span>
       <span class="nav-icon-label" style="font-weight:800;letter-spacing:-0.02em;font-size:var(--text-sm);">BitBeetle</span>
     </a>
     <button class="nav-icon-btn" :class="{ active: showSpotlight }" title="Search (⌘K)" @click="showSpotlight=true">
@@ -755,7 +755,7 @@
     <!-- Empty state -->
     <template x-if="!selectedConv">
       <div class="empty-thread">
-        <div style="font-size:3rem;margin-bottom:var(--space-4);">🪲</div>
+        <div style="margin-bottom:var(--space-4);"><img src="assets/images/logo.svg" alt="BitBeetle" style="height:48px;width:auto;display:block;margin:0 auto;opacity:0.5;"></div>
         <div style="font-family:var(--font-sans);font-size:var(--text-lg);font-weight:700;color:var(--text-primary);margin-bottom:var(--space-2);">Select a conversation</div>
         <div style="color:var(--text-muted);font-size:var(--text-sm);max-width:280px;line-height:1.6;">Choose a conversation from the list to view messages and respond.</div>
       </div>
@@ -818,7 +818,7 @@
               <!-- AI message -->
               <template x-if="msg.type === 'ai'">
                 <div class="msg-row agent">
-                  <div class="avatar avatar-sm" style="background:var(--accent);flex-shrink:0;font-size:14px;">🪲</div>
+                  <div class="avatar avatar-sm" style="background:var(--accent);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;"><img src="assets/images/logo.svg" alt="BitBeetle" style="width:100%;height:100%;object-fit:contain;padding:2px;"></div>
                   <div class="msg-bubble-wrap">
                     <div class="chat-ai-label" style="text-align:right;">
                       <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -848,7 +848,7 @@
           <!-- Streaming AI response (auto-responder) -->
           <template x-if="isAutoResponding">
             <div class="msg-row agent">
-              <div class="avatar avatar-sm" style="background:var(--accent);flex-shrink:0;font-size:14px;">🪲</div>
+              <div class="avatar avatar-sm" style="background:var(--accent);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;"><img src="assets/images/logo.svg" alt="BitBeetle" style="width:100%;height:100%;object-fit:contain;padding:2px;"></div>
               <div class="msg-bubble-wrap">
                 <div class="chat-ai-label" style="text-align:right;">
                   <svg width="10" height="10" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -1034,7 +1034,7 @@
             <div>
               <template x-if="msg.role === 'assistant'">
                 <div style="display:flex;gap:var(--space-2);align-items:flex-end;">
-                  <div style="width:24px;height:24px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">🪲</div>
+                  <div style="width:24px;height:24px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;"><img src="assets/images/logo.svg" alt="BitBeetle" style="width:100%;height:100%;object-fit:contain;padding:2px;"></div>
                   <div style="max-width:88%;">
                     <div class="chat-ai-label" style="margin-bottom:var(--space-1);">
                       <svg width="9" height="9" fill="currentColor" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -1065,7 +1065,7 @@
           <!-- Copilot typing indicator -->
           <template x-if="isCopilotLoading">
             <div style="display:flex;gap:var(--space-2);align-items:flex-end;">
-              <div style="width:24px;height:24px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;">🪲</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;overflow:hidden;"><img src="assets/images/logo.svg" alt="BitBeetle" style="width:100%;height:100%;object-fit:contain;padding:2px;"></div>
               <div class="chat-msg chat-msg-ai" style="font-size:var(--text-sm);">
                 <template x-if="copilotStreamText">
                   <span x-text="copilotStreamText"></span>
@@ -1502,7 +1502,7 @@
 
     <!-- Step 1: Welcome -->
     <div x-show="onboardingStep === 1" style="padding:var(--space-8) var(--space-8) var(--space-6);">
-      <div style="font-size:2.5rem;margin-bottom:var(--space-4);text-align:center;">🪲</div>
+      <div style="margin-bottom:var(--space-4);text-align:center;"><img src="assets/images/logo.svg" alt="BitBeetle" style="height:48px;width:auto;display:inline-block;"></div>
       <h2 style="font-family:var(--font-serif);font-size:var(--text-2xl);font-weight:700;color:var(--text-primary);text-align:center;margin-bottom:var(--space-2);">Welcome to BitBeetle</h2>
       <p style="color:var(--text-muted);font-size:var(--text-sm);text-align:center;line-height:1.7;margin-bottom:var(--space-6);">Let's get your workspace set up in under 2 minutes. We'll connect your channels, set up your AI agent, and have you resolving tickets in no time.</p>
       <div style="background:var(--bg-elevated);border:1px solid var(--border-subtle);border-radius:var(--radius-lg);padding:var(--space-4);margin-bottom:var(--space-6);">
