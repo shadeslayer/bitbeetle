@@ -206,6 +206,44 @@ const MOCK_CONVERSATIONS = [
         time: '09:01'
       }
     ]
+  },
+  {
+    id: 'BB-00009',
+    contact: { name: 'Anya Patel', initials: 'AP', email: 'anya@looptools.io', role: 'Head of Engineering', color: '#059669' },
+    company: 'Loop Tools',
+    plan: 'Growth',
+    channel: 'Email',
+    status: 'Resolved',
+    assignedTo: null,
+    createdBy: null,
+    sla: 'On track',
+    preview: 'How do I export my usage data as CSV?',
+    time: '1h',
+    unread: false,
+    starred: false,
+    topics: ['export', 'csv', 'data'],
+    messages: [
+      {
+        id: 1, role: 'user', type: 'customer',
+        content: 'Hi, I need to export our workspace usage data as a CSV for a quarterly board report. I can\'t find the option in the dashboard — where is it?',
+        time: '10:02'
+      },
+      {
+        id: 2, role: 'assistant', type: 'ai',
+        content: 'Hi Anya! You can export usage data from **Settings → Workspace → Usage & Billing → Export CSV**. The export includes active users, ticket volume, AI resolution rate, and response time metrics. The file will be emailed to your account address within a few minutes.\n\nLet me know if you need any other format or a custom date range!',
+        time: '10:02'
+      },
+      {
+        id: 3, role: 'user', type: 'customer',
+        content: 'Perfect, found it! That was super quick, thank you.',
+        time: '10:07'
+      },
+      {
+        id: 4, role: 'assistant', type: 'ai',
+        content: 'Happy to help! I\'ve marked this ticket as resolved. Feel free to reach out any time. 🪲',
+        time: '10:07'
+      }
+    ]
   }
 ];
 
