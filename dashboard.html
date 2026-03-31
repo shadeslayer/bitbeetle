@@ -361,6 +361,31 @@
     }
     .modal-overlay--spotlight { align-items: flex-start; padding-top: 15vh; }
 
+    /* ── Chart animations ─────────────────────────────────── */
+    @keyframes chartBarGrow {
+      from { transform: scaleY(0); opacity: 0.4; }
+      to   { transform: scaleY(1); opacity: 1; }
+    }
+    @keyframes chartFillGrow {
+      from { transform: scaleX(0); }
+      to   { transform: scaleX(1); }
+    }
+    @keyframes chartFadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .chart-bar {
+      transform-origin: bottom;
+      animation: chartBarGrow 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    .chart-fill {
+      transform-origin: left;
+      animation: chartFillGrow 0.65s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+    .chart-stat {
+      animation: chartFadeUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
     /* Scrollbar styling */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -1221,7 +1246,8 @@
   <!-- ═══════════════════════════════════════════════════
        REPORTS PAGE
        ═══════════════════════════════════════════════════ -->
-  <div x-show="activeNav === 'reports'" class="db-page-view" style="height:100vh;overflow-y:auto;background:var(--bg);padding:var(--space-8) var(--space-10);">
+  <template x-if="activeNav === 'reports'">
+  <div class="db-page-view" style="height:100vh;overflow-y:auto;background:var(--bg);padding:var(--space-8) var(--space-10);">
     <div style="max-width:960px;margin:0 auto;">
       <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--space-8);">
         <div>
@@ -1241,22 +1267,22 @@
 
       <!-- KPI row -->
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4);margin-bottom:var(--space-8);">
-        <div class="stat-card">
+        <div class="stat-card chart-stat" style="animation-delay:0ms">
           <div class="stat-label">Total conversations</div>
           <div class="stat-value">247</div>
           <div class="stat-delta up">↑ 18% vs last week</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card chart-stat" style="animation-delay:80ms">
           <div class="stat-label">Median resolution time</div>
           <div class="stat-value">4m 12s</div>
           <div class="stat-delta up">↑ 87% faster</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card chart-stat" style="animation-delay:160ms">
           <div class="stat-label">Customer satisfaction</div>
           <div class="stat-value">94%</div>
           <div class="stat-delta up">↑ 6% this month</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card chart-stat" style="animation-delay:240ms">
           <div class="stat-label">First contact resolution</div>
           <div class="stat-value">68%</div>
           <div class="stat-delta up">↑ AI-driven</div>
@@ -1272,8 +1298,8 @@
             <template x-for="(bar, i) in [{day:'Mon',total:28,ai:19},{day:'Tue',total:35,ai:24},{day:'Wed',total:31,ai:22},{day:'Thu',total:42,ai:30},{day:'Fri',total:38,ai:27},{day:'Sat',total:18,ai:13},{day:'Sun',total:12,ai:9}]" :key="i">
               <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
                 <div style="width:100%;display:flex;flex-direction:column;gap:2px;align-items:center;">
-                  <div :style="`width:70%;background:var(--accent);opacity:0.3;height:${(bar.total - bar.ai) * 2}px;border-radius:2px 2px 0 0;`"></div>
-                  <div :style="`width:70%;background:var(--accent);height:${bar.ai * 2}px;border-radius:2px 2px 0 0;`"></div>
+                  <div class="chart-bar" :style="`width:70%;background:var(--accent);opacity:0.3;height:${(bar.total - bar.ai) * 2}px;border-radius:2px 2px 0 0;animation-delay:${i * 60}ms`"></div>
+                  <div class="chart-bar" :style="`width:70%;background:var(--accent);height:${bar.ai * 2}px;border-radius:2px 2px 0 0;animation-delay:${i * 60 + 30}ms`"></div>
                 </div>
                 <div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);" x-text="bar.day"></div>
               </div>
@@ -1293,14 +1319,14 @@
         <div class="card">
           <div class="card-title" style="margin-bottom:var(--space-5);">By channel</div>
           <div style="display:flex;flex-direction:column;gap:var(--space-4);">
-            <template x-for="ch in [{name:'Email',pct:52,cls:'badge-blue'},{name:'Slack',pct:31,cls:'badge-orange'},{name:'Teams',pct:17,cls:'badge-teal'}]" :key="ch.name">
+            <template x-for="(ch, ci) in [{name:'Email',pct:52,cls:'badge-blue'},{name:'Slack',pct:31,cls:'badge-orange'},{name:'Teams',pct:17,cls:'badge-teal'}]" :key="ch.name">
               <div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:var(--space-2);">
                   <span class="badge badge-sm" :class="ch.cls" x-text="ch.name"></span>
                   <span style="font-size:var(--text-sm);font-weight:700;color:var(--text-primary);" x-text="ch.pct + '%'"></span>
                 </div>
                 <div style="height:6px;background:var(--border-subtle);border-radius:var(--radius-full);overflow:hidden;">
-                  <div :style="`width:${ch.pct}%;height:100%;background:var(--accent);border-radius:var(--radius-full);`"></div>
+                  <div class="chart-fill" :style="`width:${ch.pct}%;height:100%;background:var(--accent);border-radius:var(--radius-full);animation-delay:${ci * 120}ms`"></div>
                 </div>
               </div>
             </template>
@@ -1313,11 +1339,11 @@
         <div class="card">
           <div class="card-title" style="margin-bottom:var(--space-5);">Ticket status breakdown</div>
           <div style="display:flex;flex-direction:column;gap:var(--space-3);">
-            <template x-for="s in [{label:'AI Handling',count:168,pct:68,cls:'badge-blue'},{label:'Escalated',count:45,pct:18,cls:'badge-error'},{label:'Open',count:22,pct:9,cls:'badge-default'},{label:'Resolved',count:12,pct:5,cls:'badge-success'}]" :key="s.label">
-              <div style="display:flex;align-items:center;gap:var(--space-3);">
+            <template x-for="(s, si) in [{label:'AI Handling',count:168,pct:68,cls:'badge-blue'},{label:'Escalated',count:45,pct:18,cls:'badge-error'},{label:'Open',count:22,pct:9,cls:'badge-default'},{label:'Resolved',count:12,pct:5,cls:'badge-success'}]" :key="s.label">
+              <div class="chart-stat" :style="`animation-delay:${si * 80}ms`" style="display:flex;align-items:center;gap:var(--space-3);">
                 <span class="badge badge-sm" :class="s.cls" x-text="s.label" style="width:110px;justify-content:center;"></span>
                 <div style="flex:1;height:6px;background:var(--border-subtle);border-radius:var(--radius-full);overflow:hidden;">
-                  <div :style="`width:${s.pct}%;height:100%;background:var(--accent);border-radius:var(--radius-full);opacity:${s.cls === 'badge-error' ? 0.7 : 1};`"></div>
+                  <div class="chart-fill" :style="`width:${s.pct}%;height:100%;background:var(--accent);border-radius:var(--radius-full);opacity:${s.cls === 'badge-error' ? 0.7 : 1};animation-delay:${si * 80 + 100}ms`"></div>
                 </div>
                 <span style="font-size:var(--text-sm);font-weight:700;color:var(--text-primary);width:32px;text-align:right;" x-text="s.count"></span>
               </div>
@@ -1347,6 +1373,7 @@
       </div>
     </div>
   </div>
+  </template><!-- end reports x-if -->
 
   <!-- ═══════════════════════════════════════════════════
        CONTACTS PAGE
@@ -2120,6 +2147,11 @@ function dashboard() {
         this.$nextTick(() => this.triggerAutoResponse());
       } else {
         this.$nextTick(() => this.scrollThread());
+      }
+
+      // Re-trigger copilot if it's the active tab
+      if (this.rightTab === 'copilot') {
+        this.$nextTick(() => this.initCopilot());
       }
     },
 
