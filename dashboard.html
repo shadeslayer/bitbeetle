@@ -203,13 +203,19 @@
       color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em;
       border-bottom: 1px solid var(--border);
     }
-    .unread-dot {
-      display: block;
-      width: 8px; height: 8px; min-width: 8px; min-height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      flex-shrink: 0;
-      margin: auto 0;
+    .conv-card.unread {
+      position: relative;
+    }
+    .conv-card.unread::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(to bottom, rgba(59,130,246,0.10) 0%, transparent 60%);
+      border-radius: inherit;
+    }
+    [data-theme="dark"] .conv-card.unread::before {
+      background: linear-gradient(to bottom, rgba(99,157,255,0.13) 0%, transparent 60%);
     }
 
     /* Thread panel */
@@ -546,7 +552,7 @@
     <template x-if="sidebarFilter !== 'byCompany' && sidebarFilter !== 'byChannel'">
       <div>
         <template x-for="conv in filteredConversations()" :key="conv.id">
-          <div class="conv-card" :class="{ selected: selectedConv?.id === conv.id }" @click="selectConversation(conv)">
+          <div class="conv-card" :class="{ selected: selectedConv?.id === conv.id, unread: conv.unread }" @click="selectConversation(conv)">
             <div class="conv-card-top">
               <div class="avatar avatar-sm" :style="`background:${conv.contact.color};flex-shrink:0;`">
                 <span x-text="conv.contact.initials" style="font-size:10px;"></span>
@@ -556,7 +562,6 @@
                   <span x-text="conv.contact.name + ' · ' + conv.company"></span>
                   <span style="display:flex;align-items:center;gap:var(--space-1);flex-shrink:0;">
                     <svg x-show="conv.starred" width="10" height="10" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    <div class="unread-dot" x-show="conv.unread"></div>
                     <span class="conv-card-time" x-text="conv.time"></span>
                   </span>
                 </div>
@@ -587,7 +592,7 @@
               <span class="item-count" x-text="group.conversations.length"></span>
             </div>
             <template x-for="conv in group.conversations" :key="conv.id">
-              <div class="conv-card" :class="{ selected: selectedConv?.id === conv.id }" @click="selectConversation(conv)">
+              <div class="conv-card" :class="{ selected: selectedConv?.id === conv.id, unread: conv.unread }" @click="selectConversation(conv)">
                 <div class="conv-card-top">
                   <div class="avatar avatar-sm" :style="`background:${conv.contact.color};flex-shrink:0;`">
                     <span x-text="conv.contact.initials" style="font-size:10px;"></span>
@@ -597,7 +602,6 @@
                       <span x-text="sidebarFilter === 'byCompany' ? conv.contact.name : conv.contact.name + ' · ' + conv.company"></span>
                       <span style="display:flex;align-items:center;gap:var(--space-1);flex-shrink:0;">
                         <svg x-show="conv.starred" width="10" height="10" fill="#f59e0b" stroke="#f59e0b" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        <div class="unread-dot" x-show="conv.unread"></div>
                         <span class="conv-card-time" x-text="conv.time"></span>
                       </span>
                     </div>
