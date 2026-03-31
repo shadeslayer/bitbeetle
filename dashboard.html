@@ -1294,12 +1294,12 @@
         <!-- Volume chart (SVG bar chart) -->
         <div class="card">
           <div class="card-title" style="margin-bottom:var(--space-5);">Conversation volume — last 7 days</div>
-          <div style="display:flex;align-items:flex-end;gap:var(--space-3);height:120px;padding-bottom:var(--space-4);border-bottom:1px solid var(--border-subtle);">
+          <div style="display:flex;align-items:flex-end;gap:var(--space-2);height:108px;padding-bottom:var(--space-4);border-bottom:1px solid var(--border-subtle);">
             <template x-for="(bar, i) in [{day:'Mon',total:28,ai:19},{day:'Tue',total:35,ai:24},{day:'Wed',total:31,ai:22},{day:'Thu',total:42,ai:30},{day:'Fri',total:38,ai:27},{day:'Sat',total:18,ai:13},{day:'Sun',total:12,ai:9}]" :key="i">
-              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;">
-                <div style="width:100%;display:flex;flex-direction:column;gap:2px;align-items:center;">
-                  <div class="chart-bar" :style="`width:70%;background:var(--accent);opacity:0.3;height:${(bar.total - bar.ai) * 2}px;border-radius:2px 2px 0 0;animation-delay:${i * 60}ms`"></div>
-                  <div class="chart-bar" :style="`width:70%;background:var(--accent);height:${bar.ai * 2}px;border-radius:2px 2px 0 0;animation-delay:${i * 60 + 30}ms`"></div>
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:var(--space-2);">
+                <div class="chart-bar" :style="`width:100%;border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden;display:flex;flex-direction:column-reverse;animation-delay:${i*60}ms;height:${Math.round((bar.total/42)*80)}px`">
+                  <div :style="`flex:${bar.ai};background:var(--accent);`"></div>
+                  <div :style="`flex:${bar.total - bar.ai};background:var(--accent);opacity:0.22;`"></div>
                 </div>
                 <div style="font-size:10px;color:var(--text-muted);font-family:var(--font-mono);" x-text="bar.day"></div>
               </div>
