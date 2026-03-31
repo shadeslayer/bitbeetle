@@ -410,7 +410,7 @@
       </span>
       <span class="nav-icon-label" x-text="theme === 'dark' ? 'Light mode' : 'Dark mode'"></span>
     </button>
-    <div style="display:flex;align-items:center;cursor:pointer;flex-shrink:0;border-radius:var(--radius-md);padding:2px 0;margin-top:var(--space-1);" @click="bbLogout()" :title="session?.name">
+    <a href="profile.html" style="display:flex;align-items:center;cursor:pointer;flex-shrink:0;border-radius:var(--radius-md);padding:2px 0;margin-top:var(--space-1);text-decoration:none;" :title="session?.name">
       <span class="nav-icon-icon">
         <div class="avatar avatar-sm" style="background:var(--accent);">
           <span x-text="session?.initials || 'RG'"></span>
@@ -418,7 +418,7 @@
         </div>
       </span>
       <span class="nav-icon-label" style="font-size:var(--text-xs);" x-text="session?.name || 'Rohan Garg'"></span>
-    </div>
+    </a>
    </div><!-- end db-icon-nav-inner -->
   </div>
 
@@ -491,11 +491,10 @@
       </template>
     </div>
 
-    <div style="margin-top:auto;padding:var(--space-4);">
-      <div class="sidebar-item" style="border-radius:var(--radius-md);font-size:var(--text-xs);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;" @click="showManage=true;manageTab='team'">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
-        Manage
-      </div>
+    <div class="sidebar-section-label">Settings</div>
+    <div class="sidebar-item" @click="showManage=true;manageTab='team'" style="cursor:pointer;">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+      Manage
     </div>
   </div>
 

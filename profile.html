@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — BitBeetle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#f4f3ec', 'cream-light': '#fbfaf7', 'cream-dark': '#ede9df',
+            ink: '#17100e', 'ink-secondary': '#4a403a', 'ink-tertiary': '#8a7e78', 'ink-faint': '#c8c0ba',
+            navy: '#07070f', 'navy-mid': '#0e0d1a', 'navy-card': '#13121f', 'navy-border': '#1e1c2e', 'navy-muted': '#2a2840',
+            purple: '#7c3aed', 'purple-light': '#a78bfa', 'purple-bright': '#8b5cf6',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/bitbeetle.css">
+  <script src="assets/js/auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <style>
+    body { margin: 0; background: var(--bg-base); color: var(--text-primary); font-family: var(--font-sans); }
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 100vh;
+    }
+    .profile-nav {
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      padding: var(--space-6) var(--space-4);
+      gap: var(--space-1);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    .profile-nav-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      text-decoration: none;
+      margin-bottom: var(--space-5);
+      padding: 0 var(--space-2);
+    }
+    .profile-nav-logo span {
+      font-family: var(--font-sans);
+      font-weight: 800;
+      font-size: var(--text-sm);
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+    .profile-nav-section {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: var(--space-3) var(--space-2) var(--space-1);
+    }
+    .profile-nav-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background var(--duration-fast), color var(--duration-fast);
+    }
+    .profile-nav-item:hover { background: var(--bg-surface-raised); color: var(--text-primary); }
+    .profile-nav-item.active { background: var(--bg-surface-raised); color: var(--accent); font-weight: 600; }
+    .profile-main {
+      padding: var(--space-10) var(--space-8);
+      max-width: 720px;
+    }
+    .profile-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: var(--space-6);
+    }
+    .profile-section-header {
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .profile-section-title {
+      font-size: var(--text-sm);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .profile-section-desc {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .profile-field {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      align-items: start;
+      gap: var(--space-4);
+      padding: var(--space-4) var(--space-6);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .profile-field:last-child { border-bottom: none; }
+    .profile-field-label {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--text-primary);
+      padding-top: 8px;
+    }
+    .profile-field-hint {
+      font-size: var(--text-xs);
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-4) var(--space-6);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-label { font-size: var(--text-sm); font-weight: 600; color: var(--text-primary); }
+    .toggle-desc { font-size: var(--text-xs); color: var(--text-muted); margin-top: 2px; }
+    .toggle-btn {
+      width: 40px; height: 22px; border-radius: var(--radius-full);
+      border: none; cursor: pointer; transition: background var(--duration-fast);
+      position: relative; flex-shrink: 0;
+    }
+    .toggle-knob {
+      position: absolute; top: 3px; width: 16px; height: 16px;
+      border-radius: 50%; background: white;
+      transition: left var(--duration-fast);
+    }
+    .page-title {
+      font-size: var(--text-2xl);
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      margin-bottom: var(--space-1);
+    }
+    .page-subtitle {
+      font-size: var(--text-sm);
+      color: var(--text-muted);
+      margin-bottom: var(--space-8);
+    }
+  </style>
+</head>
+<body x-data="profilePage()" x-init="init()" :data-theme="theme">
+
+<div class="profile-layout">
+
+  <!-- Left nav -->
+  <nav class="profile-nav">
+    <a href="dashboard.html" class="profile-nav-logo">
+      <span style="font-size:1.4rem;">🪲</span>
+      <span>BitBeetle</span>
+    </a>
+
+    <div class="profile-nav-section">Account</div>
+    <a class="profile-nav-item" :class="{ active: tab==='profile' }" @click.prevent="tab='profile'" href="#">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/></svg>
+      Profile
+    </a>
+    <a class="profile-nav-item" :class="{ active: tab==='notifications' }" @click.prevent="tab='notifications'" href="#">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Notifications
+    </a>
+    <a class="profile-nav-item" :class="{ active: tab==='appearance' }" @click.prevent="tab='appearance'" href="#">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
+      Appearance
+    </a>
+    <a class="profile-nav-item" :class="{ active: tab==='security' }" @click.prevent="tab='security'" href="#">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Security
+    </a>
+
+    <div style="margin-top:auto;">
+      <a href="dashboard.html" class="profile-nav-item">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Back to inbox
+      </a>
+      <div class="profile-nav-item" @click="bbLogout()" style="color:var(--error);">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign out
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main class="profile-main">
+
+    <!-- Profile tab -->
+    <div x-show="tab==='profile'">
+      <div class="page-title">Profile</div>
+      <div class="page-subtitle">Manage your personal information and preferences.</div>
+
+      <!-- Avatar -->
+      <div class="profile-section">
+        <div class="profile-section-header">
+          <div>
+            <div class="profile-section-title">Avatar</div>
+            <div class="profile-section-desc">Your avatar is shown across the app and in conversations.</div>
+          </div>
+        </div>
+        <div style="padding:var(--space-6);display:flex;align-items:center;gap:var(--space-5);">
+          <div class="avatar" style="width:64px;height:64px;font-size:1.4rem;background:var(--accent);flex-shrink:0;">
+            <span x-text="session?.initials || 'RG'"></span>
+            <div class="presence presence-online"></div>
+          </div>
+          <div>
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);" x-text="session?.name || 'Rohan Garg'"></div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);margin-top:2px;" x-text="session?.email || 'admin@bitbeetle.com'"></div>
+            <div style="margin-top:var(--space-3);display:flex;gap:var(--space-2);">
+              <button class="btn btn-outline btn-sm">Change avatar</button>
+              <button class="btn btn-ghost btn-sm" style="color:var(--error);">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal info -->
+      <div class="profile-section">
+        <div class="profile-section-header">
+          <div>
+            <div class="profile-section-title">Personal information</div>
+            <div class="profile-section-desc">Update your name, email, and role.</div>
+          </div>
+          <button class="btn btn-primary btn-sm" @click="saveProfile()" :disabled="!profileDirty">Save changes</button>
+        </div>
+        <div class="profile-field">
+          <div>
+            <div class="profile-field-label">Full name</div>
+          </div>
+          <input class="input" x-model="form.name" @input="profileDirty=true" placeholder="Your full name">
+        </div>
+        <div class="profile-field">
+          <div>
+            <div class="profile-field-label">Email address</div>
+            <div class="profile-field-hint">Used to sign in and receive notifications.</div>
+          </div>
+          <input class="input" x-model="form.email" @input="profileDirty=true" type="email" placeholder="you@example.com">
+        </div>
+        <div class="profile-field">
+          <div>
+            <div class="profile-field-label">Display initials</div>
+            <div class="profile-field-hint">Shown in avatars across the app.</div>
+          </div>
+          <input class="input" x-model="form.initials" @input="profileDirty=true" maxlength="2" placeholder="RG" style="max-width:80px;">
+        </div>
+        <div class="profile-field">
+          <div>
+            <div class="profile-field-label">Role</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-3);">
+            <span class="badge badge-info badge-sm">Admin</span>
+            <span style="font-size:var(--text-xs);color:var(--text-muted);">Contact your workspace owner to change your role.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications tab -->
+    <div x-show="tab==='notifications'">
+      <div class="page-title">Notifications</div>
+      <div class="page-subtitle">Choose when and how you receive notifications.</div>
+
+      <div class="profile-section">
+        <div class="profile-section-header">
+          <div class="profile-section-title">Email notifications</div>
+        </div>
+        <template x-for="n in notifEmail" :key="n.id">
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label" x-text="n.label"></div>
+              <div class="toggle-desc" x-text="n.desc"></div>
+            </div>
+            <button class="toggle-btn" @click="n.on=!n.on" :style="n.on ? 'background:var(--accent)' : 'background:var(--border)'">
+              <span class="toggle-knob" :style="n.on ? 'left:21px' : 'left:3px'"></span>
+            </button>
+          </div>
+        </template>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-header">
+          <div class="profile-section-title">In-app notifications</div>
+        </div>
+        <template x-for="n in notifInApp" :key="n.id">
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label" x-text="n.label"></div>
+              <div class="toggle-desc" x-text="n.desc"></div>
+            </div>
+            <button class="toggle-btn" @click="n.on=!n.on" :style="n.on ? 'background:var(--accent)' : 'background:var(--border)'">
+              <span class="toggle-knob" :style="n.on ? 'left:21px' : 'left:3px'"></span>
+            </button>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <!-- Appearance tab -->
+    <div x-show="tab==='appearance'">
+      <div class="page-title">Appearance</div>
+      <div class="page-subtitle">Customize how BitBeetle looks for you.</div>
+
+      <div class="profile-section">
+        <div class="profile-section-header">
+          <div class="profile-section-title">Theme</div>
+        </div>
+        <div style="padding:var(--space-6);display:flex;gap:var(--space-4);">
+          <button @click="setTheme('light')"
+            style="flex:1;padding:var(--space-4);border-radius:var(--radius-lg);cursor:pointer;transition:all var(--duration-fast);"
+            :style="theme==='light' ? 'border:2px solid var(--accent);background:var(--blue-lightest);' : 'border:2px solid var(--border-subtle);background:var(--bg-surface-raised);'">
+            <div style="width:100%;height:56px;background:#f4f3ec;border-radius:var(--radius-md);margin-bottom:var(--space-3);border:1px solid #e5e0d8;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <div style="width:28px;height:36px;background:white;border-radius:4px;border:1px solid #e5e0d8;"></div>
+              <div style="flex:1;height:36px;background:white;border-radius:4px;border:1px solid #e5e0d8;"></div>
+            </div>
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);text-align:center;">Light</div>
+          </button>
+          <button @click="setTheme('dark')"
+            style="flex:1;padding:var(--space-4);border-radius:var(--radius-lg);cursor:pointer;transition:all var(--duration-fast);"
+            :style="theme==='dark' ? 'border:2px solid var(--accent);background:var(--blue-lightest);' : 'border:2px solid var(--border-subtle);background:var(--bg-surface-raised);'">
+            <div style="width:100%;height:56px;background:#13121f;border-radius:var(--radius-md);margin-bottom:var(--space-3);border:1px solid #1e1c2e;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <div style="width:28px;height:36px;background:#1e1c2e;border-radius:4px;border:1px solid #2a2840;"></div>
+              <div style="flex:1;height:36px;background:#1e1c2e;border-radius:4px;border:1px solid #2a2840;"></div>
+            </div>
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);text-align:center;">Dark</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-header">
+          <div class="profile-section-title">Density</div>
+        </div>
+        <div style="padding:var(--space-5) var(--space-6);display:flex;gap:var(--space-3);">
+          <template x-for="d in ['Compact','Default','Comfortable']" :key="d">
+            <button @click="density=d"
+              style="flex:1;padding:var(--space-3);border-radius:var(--radius-md);font-size:var(--text-sm);font-weight:500;cursor:pointer;transition:all var(--duration-fast);"
+              :style="density===d ? 'border:2px solid var(--accent);color:var(--accent);background:var(--blue-lightest);' : 'border:2px solid var(--border-subtle);color:var(--text-muted);background:transparent;'"
+              x-text="d">
+            </button>
+          </template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security tab -->
+    <div x-show="tab==='security'">
+      <div class="page-title">Security</div>
+      <div class="page-subtitle">Manage your password and active sessions.</div>
+
+      <div class="profile-section">
+        <div class="profile-section-header">
+          <div>
+            <div class="profile-section-title">Change password</div>
+            <div class="profile-section-desc">Use a strong, unique password for your account.</div>
+          </div>
+        </div>
+        <div class="profile-field">
+          <div class="profile-field-label">Current password</div>
+          <input class="input" type="password" placeholder="••••••••">
+        </div>
+        <div class="profile-field">
+          <div class="profile-field-label">New password</div>
+          <input class="input" type="password" placeholder="••••••••">
+        </div>
+        <div class="profile-field">
+          <div class="profile-field-label">Confirm password</div>
+          <input class="input" type="password" placeholder="••••••••">
+        </div>
+        <div style="padding:var(--space-4) var(--space-6);display:flex;justify-content:flex-end;">
+          <button class="btn btn-primary btn-sm">Update password</button>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-header">
+          <div>
+            <div class="profile-section-title">Active sessions</div>
+            <div class="profile-section-desc">These devices are currently signed in to your account.</div>
+          </div>
+        </div>
+        <template x-for="s in sessions" :key="s.id">
+          <div style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-4) var(--space-6);border-bottom:1px solid var(--border-subtle);">
+            <div style="width:36px;height:36px;border-radius:var(--radius-md);background:var(--bg-surface-raised);border:1px solid var(--border-subtle);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" x-show="s.type==='desktop'"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" x-show="s.type==='mobile'"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </div>
+            <div style="flex:1;min-width:0;">
+              <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:var(--space-2);">
+                <span x-text="s.device"></span>
+                <span x-show="s.current" class="badge badge-sm badge-success">Current</span>
+              </div>
+              <div style="font-size:var(--text-xs);color:var(--text-muted);" x-text="s.location + ' · ' + s.time"></div>
+            </div>
+            <button x-show="!s.current" class="btn btn-ghost btn-sm" style="color:var(--error);font-size:var(--text-xs);">Revoke</button>
+          </div>
+        </template>
+      </div>
+
+      <div class="profile-section" style="border-color:rgba(239,68,68,0.3);">
+        <div class="profile-section-header" style="border-bottom-color:rgba(239,68,68,0.15);">
+          <div>
+            <div class="profile-section-title" style="color:var(--error);">Danger zone</div>
+            <div class="profile-section-desc">Irreversible actions for your account.</div>
+          </div>
+        </div>
+        <div style="padding:var(--space-5) var(--space-6);display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);">Delete account</div>
+            <div style="font-size:var(--text-xs);color:var(--text-muted);margin-top:2px;">Permanently remove your account and all your data.</div>
+          </div>
+          <button class="btn btn-sm" style="border-color:var(--error);color:var(--error);background:transparent;">Delete account</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function profilePage() {
+  return {
+    session: null,
+    tab: 'profile',
+    theme: localStorage.getItem('bb_theme') || 'light',
+    profileDirty: false,
+    density: 'Default',
+    form: { name: '', email: '', initials: '' },
+    notifEmail: [
+      { id: 1, label: 'New conversation assigned', desc: 'When a conversation is assigned to you.', on: true },
+      { id: 2, label: 'Mention', desc: 'When someone @mentions you in a conversation.', on: true },
+      { id: 3, label: 'Escalation', desc: 'When a conversation is escalated to your team.', on: true },
+      { id: 4, label: 'Weekly digest', desc: 'A summary of your inbox activity each week.', on: false },
+    ],
+    notifInApp: [
+      { id: 5, label: 'New message', desc: 'When a customer replies to an open conversation.', on: true },
+      { id: 6, label: 'AI resolution', desc: 'When the AI agent resolves a conversation.', on: false },
+      { id: 7, label: 'SLA at risk', desc: 'When a ticket is approaching its SLA deadline.', on: true },
+    ],
+    sessions: [
+      { id: 1, type: 'desktop', device: 'Chrome on macOS', location: 'Mumbai, IN', time: 'Active now', current: true },
+      { id: 2, type: 'mobile', device: 'Safari on iPhone', location: 'Mumbai, IN', time: '2 hours ago', current: false },
+      { id: 3, type: 'desktop', device: 'Firefox on Windows', location: 'Bengaluru, IN', time: '3 days ago', current: false },
+    ],
+
+    init() {
+      if (!bbGuard()) return;
+      this.session = bbGetSession();
+      document.documentElement.setAttribute('data-theme', this.theme);
+      this.form.name = this.session?.name || 'Rohan Garg';
+      this.form.email = this.session?.email || 'admin@bitbeetle.com';
+      this.form.initials = this.session?.initials || 'RG';
+    },
+
+    setTheme(t) {
+      this.theme = t;
+      localStorage.setItem('bb_theme', t);
+      document.documentElement.setAttribute('data-theme', t);
+    },
+
+    saveProfile() {
+      // In a real app this would call an API. Here we just update the session in localStorage.
+      const s = bbGetSession();
+      if (s) {
+        s.name = this.form.name;
+        s.email = this.form.email;
+        s.initials = this.form.initials.toUpperCase().slice(0, 2);
+        localStorage.setItem('bb_session', JSON.stringify(s));
+        this.session = s;
+      }
+      this.profileDirty = false;
+    },
+  };
+}
+</script>
+</body>
+</html>
