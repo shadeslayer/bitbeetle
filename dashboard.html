@@ -473,9 +473,22 @@
       <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       By company
     </div>
-    <div class="sidebar-item" :class="{ active: sidebarFilter === 'byChannel' }" @click="sidebarFilter='byChannel'; convFilter='all'">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      By channel
+    <div class="sidebar-item" :class="{ active: byChannelOpen }" @click="byChannelOpen=!byChannelOpen; if(!byChannelOpen && sidebarFilter.startsWith('ch:')) sidebarFilter='all'" style="justify-content:space-between;">
+      <span style="display:flex;align-items:center;gap:var(--space-2);">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        By channel
+      </span>
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;transition:transform 0.18s;" :style="byChannelOpen ? 'transform:rotate(180deg)' : ''"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div x-show="byChannelOpen" style="padding-left:var(--space-5);display:flex;flex-direction:column;gap:2px;">
+      <template x-for="ch in uniqueChannels()" :key="ch.name">
+        <div class="sidebar-item" style="font-size:var(--text-xs);padding:var(--space-1) var(--space-2);"
+          :class="{ active: sidebarFilter === 'ch:'+ch.name }"
+          @click.stop="sidebarFilter='ch:'+ch.name; convFilter='all'">
+          <span class="badge badge-sm" :class="CHANNEL_COLORS[ch.name]" x-text="ch.name"></span>
+          <span class="item-count" style="margin-left:auto;" x-text="ch.count"></span>
+        </div>
+      </template>
     </div>
 
     <div style="margin-top:auto;padding:var(--space-4);">
@@ -489,7 +502,7 @@
   <!-- Panel 3: Conversation List -->
   <div class="db-panel db-conv-list" x-show="activeNav === 'inbox'">
     <div class="db-conv-header">
-      <span style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);" x-text="{ all:'All Conversations', mine:'Your Inbox', mentions:'Mentions', created:'Created by You', unassigned:'Unassigned', ai:'AI Handling', escalated:'Escalated', resolved:'Resolved', byCompany:'By Company', byChannel:'By Channel' }[sidebarFilter] || 'All Conversations'"></span>
+      <span style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);" x-text="sidebarFilter.startsWith('ch:') ? sidebarFilter.slice(3) : ({ all:'All Conversations', mine:'Your Inbox', mentions:'Mentions', created:'Created by You', unassigned:'Unassigned', ai:'AI Handling', escalated:'Escalated', resolved:'Resolved', byCompany:'By Company', byChannel:'By Channel' }[sidebarFilter] || 'All Conversations')"></span>
       <div style="display:flex;gap:var(--space-2);">
         <!-- Filter dropdown -->
         <div style="position:relative;">
@@ -1745,6 +1758,7 @@ function dashboard() {
     newConvForm: { to: '', subject: '', message: '' },
     showManage: false,
     manageTab: 'team',
+    byChannelOpen: false,
     agentModel: 'anthropic/claude-haiku-4-5',
     agentAutoRespond: true,
     agentKnowledgeBase: true,
@@ -1798,6 +1812,9 @@ function dashboard() {
         list = list.filter(c => c.status === 'Escalated');
       } else if (this.sidebarFilter === 'resolved') {
         list = list.filter(c => c.status === 'Resolved');
+      } else if (this.sidebarFilter.startsWith('ch:')) {
+        const ch = this.sidebarFilter.slice(3);
+        list = list.filter(c => c.channel === ch);
       }
       // tab filter (status sub-filter within the above)
       if (this.convFilter !== 'all') {
@@ -1831,6 +1848,14 @@ function dashboard() {
         c.preview.toLowerCase().includes(q) ||
         c.id.toLowerCase().includes(q)
       );
+    },
+
+    uniqueChannels() {
+      const counts = {};
+      for (const c of this.conversations) {
+        counts[c.channel] = (counts[c.channel] || 0) + 1;
+      }
+      return Object.keys(counts).sort().map(name => ({ name, count: counts[name] }));
     },
 
     groupedConversations() {
