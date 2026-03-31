@@ -365,6 +365,103 @@
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
+
+    /* ── Mobile nav controls (hidden on desktop) ──────────────── */
+    .db-mobile-back,
+    .db-mobile-menu-btn,
+    .db-mobile-info-btn { display: none !important; }
+    .db-sidebar-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 35;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .db-bottom-nav { display: none; }
+    .db-bottom-nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; border: none; background: transparent; cursor: pointer;
+      color: var(--text-muted); font-size: 10px; font-weight: 500;
+      transition: color var(--duration-fast); padding: 0;
+    }
+    .db-bottom-nav-item.active { color: var(--accent); }
+    .db-bottom-nav-item:hover { color: var(--text-primary); }
+
+    /* ── Mobile responsive layout ────────────────────────────── */
+    @media (max-width: 767px) {
+      /* Single-column: each panel takes full viewport width */
+      .db-layout {
+        grid-template-columns: 1fr !important;
+      }
+      /* Hide the left icon nav — replaced by bottom bar */
+      .db-icon-nav { display: none !important; }
+
+      /* All inbox panels become full-screen fixed layers */
+      .db-panel, .db-thread, .db-right {
+        position: fixed !important;
+        top: 0; left: 0; right: 0; bottom: 56px;
+        width: 100% !important;
+        height: auto !important;
+      }
+
+      /* Conv-list: base layer, always visible when inbox active */
+      .db-conv-list { z-index: 10; }
+
+      /* Sidebar: drawer sliding in from the left */
+      .db-sidebar {
+        z-index: 40;
+        width: min(85vw, 300px) !important;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+      }
+      .db-sidebar.mobile-open {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.22);
+      }
+      .db-sidebar-overlay {
+        display: block;
+        bottom: 56px;
+      }
+      .db-sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+
+      /* Thread: slides in from the right */
+      .db-thread {
+        z-index: 20;
+        transform: translateX(100%);
+        transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+      }
+      .db-thread.mobile-show { transform: translateX(0); }
+
+      /* Right/details panel: slides in on top of thread */
+      .db-right {
+        z-index: 30;
+        transform: translateX(100%);
+        transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+      }
+      .db-right.mobile-show { transform: translateX(0); }
+
+      /* Show mobile-only controls */
+      .db-mobile-back { display: flex !important; }
+      .db-mobile-menu-btn { display: flex !important; }
+      .db-mobile-info-btn { display: flex !important; }
+
+      /* Bottom navigation bar */
+      .db-bottom-nav {
+        display: flex !important;
+        position: fixed; bottom: 0; left: 0; right: 0; height: 56px;
+        background: var(--bg-surface);
+        border-top: 1px solid var(--border-subtle);
+        z-index: 200;
+        align-items: stretch;
+      }
+
+      /* Tighten thread header on mobile */
+      .db-thread-header { padding: var(--space-3) var(--space-3); gap: var(--space-2); }
+
+      /* Hide badge clutter in thread header on mobile */
+      .db-thread-header .badge { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -428,8 +525,11 @@
    </div><!-- end db-icon-nav-inner -->
   </div>
 
+  <!-- Sidebar overlay (mobile only) -->
+  <div class="db-sidebar-overlay" :class="{ open: mobileSidebarOpen }" @click="mobileSidebarOpen=false"></div>
+
   <!-- Panel 2: Sidebar -->
-  <div class="db-panel db-sidebar" x-show="activeNav === 'inbox'">
+  <div class="db-panel db-sidebar" x-show="activeNav === 'inbox'" :class="{ 'mobile-open': mobileSidebarOpen }">
     <div class="db-sidebar-header">
       <div class="db-sidebar-title">Inbox</div>
       <button class="nav-icon-btn" style="width:28px;height:28px;" title="New conversation" @click="showNewConv=true;newConvForm={to:'',subject:'',message:''}">
@@ -507,6 +607,9 @@
   <!-- Panel 3: Conversation List -->
   <div class="db-panel db-conv-list" x-show="activeNav === 'inbox'">
     <div class="db-conv-header">
+      <button class="db-mobile-menu-btn nav-icon-btn" style="width:28px;height:28px;flex-shrink:0;" title="Menu" @click="mobileSidebarOpen=true">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
       <span style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:var(--text-primary);" x-text="sidebarFilter.startsWith('ch:') ? sidebarFilter.slice(3) : ({ all:'All Conversations', mine:'Your Inbox', mentions:'Mentions', created:'Created by You', unassigned:'Unassigned', ai:'AI Handling', escalated:'Escalated', resolved:'Resolved', byCompany:'By Company', byChannel:'By Channel' }[sidebarFilter] || 'All Conversations')"></span>
       <div style="display:flex;gap:var(--space-2);">
         <!-- Filter dropdown -->
@@ -623,7 +726,7 @@
   </div>
 
   <!-- Panel 4: Thread -->
-  <div class="db-thread" x-show="activeNav === 'inbox'">
+  <div class="db-thread" x-show="activeNav === 'inbox'" :class="{ 'mobile-show': mobilePanel === 'thread' }">
     <!-- Empty state -->
     <template x-if="!selectedConv">
       <div class="empty-thread">
@@ -638,6 +741,9 @@
       <div style="display:flex;flex-direction:column;height:100%;overflow:hidden;">
         <!-- Thread header -->
         <div class="db-thread-header">
+          <button class="db-mobile-back nav-icon-btn" style="width:32px;height:32px;flex-shrink:0;" @click="mobilePanel='list'">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
           <div class="avatar avatar-sm" :style="`background:${selectedConv.contact.color};flex-shrink:0;`">
             <span x-text="selectedConv.contact.initials" style="font-size:10px;"></span>
           </div>
@@ -662,6 +768,9 @@
               Reopen
             </button>
           </template>
+          <button class="db-mobile-info-btn nav-icon-btn" style="width:32px;height:32px;flex-shrink:0;" title="Details" @click="mobilePanel='details'">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </button>
         </div>
 
         <!-- Messages -->
@@ -788,8 +897,11 @@
   </div>
 
   <!-- Panel 5: Right Details/Copilot -->
-  <div class="db-panel db-right" x-show="activeNav === 'inbox'">
+  <div class="db-panel db-right" x-show="activeNav === 'inbox'" :class="{ 'mobile-show': mobilePanel === 'details' }">
     <div class="db-right-tabs">
+      <button class="db-mobile-back nav-icon-btn" style="width:32px;height:32px;flex-shrink:0;margin-left:var(--space-2);" @click="mobilePanel='thread'" title="Back">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
       <button class="db-right-tab" :class="{ active: rightTab === 'details' }" @click="rightTab='details'">Details</button>
       <button class="db-right-tab" :class="{ active: rightTab === 'copilot' }" @click="rightTab='copilot';initCopilot()">Copilot</button>
     </div>
@@ -1055,17 +1167,26 @@
 
         <div class="card">
           <div class="card-title" style="margin-bottom:var(--space-5);">Recent AI activity</div>
-          <div style="display:flex;flex-direction:column;gap:var(--space-3);">
-            <template x-for="conv in this.conversations.filter(c => c.status === 'AI Handling' || c.messages.some(m => m.type === 'ai')).slice(0,5)" :key="conv.id">
-              <div style="display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) 0;border-bottom:1px solid var(--border-subtle);">
-                <div class="avatar avatar-sm" :style="`background:${conv.contact.color};`" style="font-size:10px;flex-shrink:0;">
-                  <span x-text="conv.contact.initials"></span>
-                </div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <template x-for="entry in [
+              {icon:'✅',color:'#059669',label:'Auto-resolved',ticket:'BB-00009',contact:'Anya Patel',company:'Loop Tools',note:'CSV export query answered with 98% confidence',time:'1h ago'},
+              {icon:'💬',color:'var(--accent)',label:'Auto-responded',ticket:'BB-00001',contact:'Jordi Lagunilla',company:'Vip District',note:'Deployment 500 error — awaiting customer confirmation',time:'2m ago'},
+              {icon:'🔺',color:'#d97706',label:'Escalated',ticket:'BB-00002',contact:'Carlos Falo',company:'Coniq',note:'Webhook schema mismatch — requires engineering review',time:'18m ago'},
+              {icon:'💬',color:'var(--accent)',label:'Auto-responded',ticket:'BB-00004',contact:'Lisa Nguyen',company:'Growthbook',note:'Password reset flow — steps sent, awaiting confirmation',time:'45m ago'},
+              {icon:'✅',color:'#059669',label:'Auto-resolved',ticket:'BB-00006',contact:'Miguel Torres',company:'Fintrack',note:'API rate limit explanation and quota increase guide',time:'2h ago'},
+              {icon:'💬',color:'var(--accent)',label:'Auto-responded',ticket:'BB-00005',contact:'Priya Mehta',company:'Stackblast',note:'Billing charge query — invoice breakdown sent',time:'3h ago'}
+            ]" :key="entry.ticket">
+              <div style="display:flex;align-items:flex-start;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid var(--border-subtle);">
+                <div style="width:28px;height:28px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;" :style="`background:${entry.color}18;`" x-text="entry.icon"></div>
                 <div style="flex:1;min-width:0;">
-                  <div style="font-size:var(--text-sm);font-weight:600;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" x-text="conv.contact.name + ' · ' + conv.company"></div>
-                  <div style="font-size:var(--text-xs);color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" x-text="conv.preview"></div>
+                  <div style="display:flex;align-items:baseline;gap:var(--space-2);flex-wrap:wrap;">
+                    <span style="font-size:var(--text-xs);font-weight:700;" :style="`color:${entry.color}`" x-text="entry.label"></span>
+                    <span style="font-size:var(--text-xs);color:var(--text-muted);font-family:var(--font-mono);" x-text="entry.ticket"></span>
+                    <span style="font-size:var(--text-xs);font-weight:600;color:var(--text-primary);" x-text="entry.contact + ' · ' + entry.company"></span>
+                  </div>
+                  <div style="font-size:var(--text-xs);color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" x-text="entry.note"></div>
                 </div>
-                <span class="badge badge-sm" :class="STATUS_COLORS[conv.status]" x-text="conv.status"></span>
+                <span style="font-size:var(--text-xs);color:var(--text-muted);white-space:nowrap;flex-shrink:0;" x-text="entry.time"></span>
               </div>
             </template>
           </div>
@@ -1296,6 +1417,30 @@
       </div>
     </div>
   </div>
+
+  <!-- Mobile bottom navigation -->
+  <nav class="db-bottom-nav">
+    <button class="db-bottom-nav-item" :class="{ active: activeNav === 'inbox' }" @click="activeNav='inbox'; mobilePanel='list'; mobileSidebarOpen=false">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <span>Inbox</span>
+    </button>
+    <button class="db-bottom-nav-item" :class="{ active: activeNav === 'ai' }" @click="activeNav='ai'; mobileSidebarOpen=false">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      <span>AI Agent</span>
+    </button>
+    <button class="db-bottom-nav-item" :class="{ active: activeNav === 'reports' }" @click="activeNav='reports'; mobileSidebarOpen=false">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Reports</span>
+    </button>
+    <button class="db-bottom-nav-item" :class="{ active: activeNav === 'contacts' }" @click="activeNav='contacts'; mobileSidebarOpen=false">
+      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Contacts</span>
+    </button>
+    <a href="profile.html" class="db-bottom-nav-item">
+      <div class="avatar" style="width:24px;height:24px;font-size:9px;background:var(--accent);" x-text="session?.initials || 'RG'"></div>
+      <span x-text="(session?.name || 'Profile').split(' ')[0]"></span>
+    </a>
+  </nav>
 
 </div><!-- end db-layout -->
 
@@ -1777,6 +1922,8 @@ function dashboard() {
     showManage: false,
     manageTab: 'team',
     byChannelOpen: false,
+    mobilePanel: 'list',
+    mobileSidebarOpen: false,
     agentModel: 'anthropic/claude-haiku-4-5',
     agentAutoRespond: true,
     agentKnowledgeBase: true,
@@ -1948,6 +2095,8 @@ function dashboard() {
       this.isAutoResponding = false;
       this.copilotInitialized = false;
       this.copilotMessages = [];
+      this.mobilePanel = 'thread';
+      this.mobileSidebarOpen = false;
 
       // Auto-respond if AI Handling and no AI message yet
       const hasAiMsg = conv.messages.some(m => m.type === 'ai');
@@ -2044,8 +2193,8 @@ function dashboard() {
     closeConversation() {
       if (this.selectedConv) {
         this.selectedConv.status = 'Resolved';
-        const src = this.conversations.find(c => c.id === this.selectedConv.id);
-        if (src) src.status = 'Resolved';
+        const idx = this.conversations.findIndex(c => c.id === this.selectedConv.id);
+        if (idx !== -1) this.conversations[idx] = { ...this.conversations[idx], status: 'Resolved' };
       }
     },
 
@@ -2084,8 +2233,8 @@ function dashboard() {
     reopenConversation() {
       if (this.selectedConv) {
         this.selectedConv.status = 'Open';
-        const src = this.conversations.find(c => c.id === this.selectedConv.id);
-        if (src) src.status = 'Open';
+        const idx = this.conversations.findIndex(c => c.id === this.selectedConv.id);
+        if (idx !== -1) this.conversations[idx] = { ...this.conversations[idx], status: 'Open' };
       }
     },
 
