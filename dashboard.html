@@ -1622,38 +1622,29 @@
       </button>
     </div>
     <!-- Tabs -->
-    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);flex-shrink:0;">
-      <button @click="manageTab='team'"
-        :style="manageTab==='team' ? 'color:var(--accent);border-bottom:2px solid var(--accent);' : 'color:var(--text-muted);border-bottom:2px solid transparent;'"
-        style="display:flex;align-items:center;gap:6px;padding:var(--space-3) var(--space-5);font-size:var(--text-sm);font-weight:500;background:transparent;border:none;border-left:none;border-right:none;border-top:none;border-radius:0;cursor:pointer;transition:color var(--duration-fast);white-space:nowrap;">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <div class="db-right-tabs" style="background:var(--bg-surface);">
+      <button class="db-right-tab" :class="{ active: manageTab==='team' }" @click="manageTab='team'">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;margin-right:6px;">
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
           <circle cx="9" cy="7" r="4"/>
           <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
           <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        Team
+        </svg>Team
       </button>
-      <button @click="manageTab='rules'"
-        :style="manageTab==='rules' ? 'color:var(--accent);border-bottom:2px solid var(--accent);' : 'color:var(--text-muted);border-bottom:2px solid transparent;'"
-        style="display:flex;align-items:center;gap:6px;padding:var(--space-3) var(--space-5);font-size:var(--text-sm);font-weight:500;background:transparent;border:none;border-left:none;border-right:none;border-top:none;border-radius:0;cursor:pointer;transition:color var(--duration-fast);white-space:nowrap;">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <button class="db-right-tab" :class="{ active: manageTab==='rules' }" @click="manageTab='rules'">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;margin-right:6px;">
           <rect x="3" y="3" width="7" height="7"/>
           <rect x="14" y="3" width="7" height="7"/>
           <rect x="14" y="14" width="7" height="7"/>
           <rect x="3" y="14" width="7" height="7"/>
-        </svg>
-        Rules
+        </svg>Rules
       </button>
-      <button @click="manageTab='integrations'"
-        :style="manageTab==='integrations' ? 'color:var(--accent);border-bottom:2px solid var(--accent);' : 'color:var(--text-muted);border-bottom:2px solid transparent;'"
-        style="display:flex;align-items:center;gap:6px;padding:var(--space-3) var(--space-5);font-size:var(--text-sm);font-weight:500;background:transparent;border:none;border-left:none;border-right:none;border-top:none;border-radius:0;cursor:pointer;transition:color var(--duration-fast);white-space:nowrap;">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <button class="db-right-tab" :class="{ active: manageTab==='integrations' }" @click="manageTab='integrations'">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="display:inline-block;vertical-align:middle;margin-right:6px;">
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
           <polyline points="15 3 21 3 21 9"/>
           <line x1="10" y1="14" x2="21" y2="3"/>
-        </svg>
-        Integrations
+        </svg>Integrations
       </button>
     </div>
     <!-- Tab content -->
