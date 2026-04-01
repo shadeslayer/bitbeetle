@@ -2147,3 +2147,91 @@
       /* Disable theme transition flash */
       body { transition: none !important; }
     }
+
+/* ── NAVY GLASS UTILITIES ─────────────────────────────── */
+.glass-panel {
+  background: var(--navy-mid);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius-lg);
+}
+.glass-panel-deep {
+  background: var(--navy-card);
+  border: 1px solid var(--navy-border);
+  border-radius: var(--radius-lg);
+}
+.glass-active {
+  background: rgba(27,159,232,0.10);
+  border-color: rgba(27,159,232,0.30);
+}
+.glass-selected {
+  background: rgba(27,159,232,0.12);
+  border: 1px solid rgba(27,159,232,0.35);
+}
+
+/* ── SCROLL / ENTRANCE ANIMATIONS ─────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUpSm {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.anim-fade-up {
+  opacity: 0;
+  animation: fadeUp 500ms ease-out forwards;
+}
+.anim-fade-up-sm {
+  opacity: 0;
+  animation: fadeUpSm 300ms ease-out forwards;
+}
+.anim-scale-in {
+  opacity: 0;
+  animation: scaleIn 200ms ease-out forwards;
+}
+
+/* Stagger delays */
+.anim-delay-0  { animation-delay:   0ms; }
+.anim-delay-1  { animation-delay: 100ms; }
+.anim-delay-2  { animation-delay: 200ms; }
+.anim-delay-3  { animation-delay: 300ms; }
+.anim-delay-4  { animation-delay: 400ms; }
+.anim-delay-5  { animation-delay: 500ms; }
+.anim-delay-6  { animation-delay: 600ms; }
+/* Dashboard finer stagger */
+.anim-delay-d0 { animation-delay:   0ms; }
+.anim-delay-d1 { animation-delay:  40ms; }
+.anim-delay-d2 { animation-delay:  80ms; }
+.anim-delay-d3 { animation-delay: 120ms; }
+.anim-delay-d4 { animation-delay: 160ms; }
+.anim-delay-d5 { animation-delay: 200ms; }
+
+/* Scroll-reveal: JS adds .is-visible to trigger animation */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+}
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Copilot tab fade */
+.tab-fade {
+  animation: fadeUpSm 150ms ease-out forwards;
+}
+
+/* Onboarding modal slide-up */
+.modal-slide-up {
+  animation: slideUp 280ms ease-out forwards;
+}
