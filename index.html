@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-accent="indigo">
+<html lang="en" data-theme="light" data-accent="indigo">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,14 +42,16 @@
       grid-template-columns: 1fr 1fr;
       gap: var(--space-16);
       align-items: center;
-      min-height: 85vh;
+      min-height: 100vh;
       padding: var(--space-24) var(--space-6) var(--space-20);
       max-width: 1200px;
       margin: 0 auto;
     }
+    .hero-mobile-preview { display: none; margin-bottom: var(--space-8); }
     @media (max-width: 900px) {
-      .hero-split { grid-template-columns: 1fr; min-height: auto; }
+      .hero-split { grid-template-columns: 1fr; min-height: 100vh; }
       .hero-mockup { display: none; }
+      .hero-mobile-preview { display: block; }
     }
 
     /* Dashboard mockup in hero */
@@ -118,48 +120,86 @@
     }
   </style>
 </head>
-<body style="background:var(--navy);color:#fff;">
+<body style="background:var(--cream);color:var(--ink);">
 
   <!-- Announcement bar -->
-  <div id="announce-bar" style="background:var(--navy-mid);border-bottom:1px solid var(--navy-border);padding:var(--space-2) var(--space-6);text-align:center;font-size:var(--text-sm);color:#8bb8d8;font-family:var(--font-sans);">
+  <div id="announce-bar" style="background:rgba(99,102,241,0.08);border-bottom:1px solid rgba(99,102,241,0.15);padding:var(--space-2) var(--space-6);text-align:center;font-size:var(--text-sm);color:var(--ink-secondary);font-family:var(--font-sans);">
     Now in early access — <a href="#pricing" style="color:#6366F1;font-weight:700;">get €200 in free AI credits →</a>
   </div>
 
   <!-- Sticky nav -->
-  <header id="site-header" style="background:var(--navy);border-bottom:1px solid var(--navy-border);position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-6);height:64px;">
+  <header id="site-header" style="background:var(--cream);border-bottom:1px solid var(--cream-dark);position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-6);height:64px;">
     <div style="display:flex;align-items:center;gap:var(--space-8);">
-      <div><img src="assets/images/logo.svg" alt="BitBeetle" style="height:44px;width:auto;display:block;"></div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img src="assets/images/logo.svg" alt="BitBeetle" style="height:66px;width:auto;display:block;">
+        <span style="font-family:var(--font-sans);font-size:var(--text-md);font-weight:700;color:var(--ink);letter-spacing:-0.01em;">BitBeetle</span>
+      </div>
       <nav style="display:flex;gap:var(--space-6);">
-        <a href="#features" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:#8bb8d8;text-decoration:none;transition:color 150ms;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#8bb8d8'">Product</a>
-        <a href="#pricing" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:#8bb8d8;text-decoration:none;transition:color 150ms;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#8bb8d8'">Pricing</a>
-        <a href="#about" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:#8bb8d8;text-decoration:none;transition:color 150ms;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#8bb8d8'">Company</a>
+        <a href="#features" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:var(--ink-secondary);text-decoration:none;transition:color 150ms;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--ink-secondary)'">Product</a>
+        <a href="#pricing" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:var(--ink-secondary);text-decoration:none;transition:color 150ms;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--ink-secondary)'">Pricing</a>
+        <a href="#about" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:500;color:var(--ink-secondary);text-decoration:none;transition:color 150ms;" onmouseover="this.style.color='var(--ink)'" onmouseout="this.style.color='var(--ink-secondary)'">Company</a>
       </nav>
     </div>
     <div style="display:flex;gap:var(--space-3);align-items:center;">
-      <a href="login.html" class="nav-login" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:#8bb8d8;text-decoration:none;padding:0.5em 1em;border:1px solid var(--navy-border);border-radius:var(--radius-full);transition:all 150ms;" onmouseover="this.style.color='#fff';this.style.borderColor='#6366F1'" onmouseout="this.style.color='#8bb8d8';this.style.borderColor='var(--navy-border)'">Log in</a>
+      <a href="login.html" class="nav-login" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:600;color:var(--ink-secondary);text-decoration:none;padding:0.5em 1em;border:1px solid var(--cream-dark);border-radius:var(--radius-full);transition:all 150ms;" onmouseover="this.style.color='var(--ink)';this.style.borderColor='#6366F1'" onmouseout="this.style.color='var(--ink-secondary)';this.style.borderColor='var(--cream-dark)'">Log in</a>
       <a href="login.html" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:#fff;text-decoration:none;padding:0.5em 1.2em;background:#6366F1;border-radius:var(--radius-full);transition:background 150ms;" onmouseover="this.style.background='#4F46E5'" onmouseout="this.style.background='#6366F1'">Start free</a>
     </div>
   </header>
 
-  <!-- Hero — dark navy, split layout -->
-  <section style="background:var(--navy);">
+  <!-- Hero — light cream, split layout -->
+  <section style="background:var(--cream);">
     <div class="hero-split">
       <!-- Left: copy -->
       <div>
+        <!-- Mobile-only product preview -->
+        <div class="hero-mobile-preview anim-fade-up anim-delay-0">
+          <div style="background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(10,22,40,0.10);border:1px solid var(--cream-dark);">
+            <div style="padding:12px 16px;border-bottom:1px solid var(--cream-dark);display:flex;align-items:center;gap:8px;">
+              <div style="width:8px;height:8px;border-radius:50%;background:#6366F1;"></div>
+              <span style="font-size:12px;font-weight:600;color:var(--ink);font-family:var(--font-sans);">All Conversations</span>
+              <span style="margin-left:auto;font-size:11px;color:var(--ink-tertiary);font-family:var(--font-sans);">3 open</span>
+            </div>
+            <div style="padding:10px 16px;border-bottom:1px solid rgba(0,0,0,0.05);display:flex;align-items:center;gap:10px;">
+              <div style="width:34px;height:34px;border-radius:50%;background:#6366F1;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">JL</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:12px;font-weight:600;color:var(--ink);font-family:var(--font-sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Jordi Lagunilla · Vip District</div>
+                <div style="font-size:11px;color:var(--ink-tertiary);font-family:var(--font-sans);">Getting 500 errors after deploy…</div>
+              </div>
+              <span style="font-size:10px;font-weight:700;color:#059669;background:rgba(5,150,105,0.10);padding:2px 8px;border-radius:20px;white-space:nowrap;font-family:var(--font-sans);">AI resolved</span>
+            </div>
+            <div style="padding:10px 16px;border-bottom:1px solid rgba(0,0,0,0.05);display:flex;align-items:center;gap:10px;">
+              <div style="width:34px;height:34px;border-radius:50%;background:#f59e0b;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">CF</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:12px;font-weight:600;color:var(--ink);font-family:var(--font-sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Carlos Falo · Coniq</div>
+                <div style="font-size:11px;color:var(--ink-tertiary);font-family:var(--font-sans);">Webhook integration isn't firing…</div>
+              </div>
+              <span style="font-size:10px;font-weight:700;color:#6366F1;background:rgba(99,102,241,0.10);padding:2px 8px;border-radius:20px;white-space:nowrap;font-family:var(--font-sans);">Escalated</span>
+            </div>
+            <div style="padding:10px 16px;display:flex;align-items:center;gap:10px;">
+              <div style="width:34px;height:34px;border-radius:50%;background:#14b8a6;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;">FC</div>
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:12px;font-weight:600;color:var(--ink);font-family:var(--font-sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Ferran Caellas · Altima SaaS</div>
+                <div style="font-size:11px;color:var(--ink-tertiary);font-family:var(--font-sans);">Can we export analytics as CSV?</div>
+              </div>
+              <span style="font-size:10px;font-weight:700;color:#059669;background:rgba(5,150,105,0.10);padding:2px 8px;border-radius:20px;white-space:nowrap;font-family:var(--font-sans);">AI resolved</span>
+            </div>
+          </div>
+        </div>
+
         <div class="anim-fade-up anim-delay-0" style="display:inline-flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-6);padding:0.3em 0.9em;border-radius:var(--radius-full);background:rgba(99,102,241,0.10);border:1px solid rgba(99,102,241,0.30);font-family:var(--font-sans);font-size:var(--text-xs);font-weight:700;letter-spacing:0.08em;color:#6366F1;text-transform:uppercase;">
           AI SUPPORT PLATFORM
         </div>
-        <h1 class="anim-fade-up anim-delay-1" style="font-family:var(--font-display);font-size:clamp(2.2rem,4vw,3.4rem);font-weight:400;line-height:1.15;color:#fff;margin:0 0 var(--space-6);max-width:520px;">
+        <h1 class="anim-fade-up anim-delay-1" style="font-family:var(--font-display);font-size:clamp(2.2rem,4vw,3.4rem);font-weight:400;line-height:1.15;color:var(--ink);margin:0 0 var(--space-6);max-width:520px;">
           The support platform that <em style="color:#6366F1;font-style:italic;">closes tickets,</em> not just routes them.
         </h1>
-        <p class="anim-fade-up anim-delay-2" style="font-family:var(--font-body);font-size:var(--text-md);color:#8bb8d8;max-width:440px;margin:0 0 var(--space-10);line-height:1.65;">
+        <p class="anim-fade-up anim-delay-2" style="font-family:var(--font-body);font-size:var(--text-md);color:var(--ink-secondary);max-width:440px;margin:0 0 var(--space-10);line-height:1.65;">
           BitBeetle unifies email, Slack, and Teams into one inbox. Its AI agent reads your docs and codebase to resolve issues at first contact.
         </p>
-        <div class="anim-fade-up anim-delay-3 hero-email-wrap" style="display:inline-flex;align-items:center;background:var(--navy-mid);border:1px solid var(--navy-border);border-radius:var(--radius-full);padding:var(--space-1) var(--space-1) var(--space-1) var(--space-4);gap:var(--space-2);max-width:420px;">
-          <input type="email" placeholder="your@company.com" style="flex:1;background:transparent;border:none;outline:none;font-family:var(--font-sans);font-size:var(--text-sm);color:#fff;min-width:180px;" />
+        <div class="anim-fade-up anim-delay-3 hero-email-wrap" style="display:inline-flex;align-items:center;background:#fff;border:1px solid var(--cream-dark);border-radius:var(--radius-full);padding:var(--space-1) var(--space-1) var(--space-1) var(--space-4);gap:var(--space-2);max-width:420px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+          <input type="email" placeholder="your@company.com" style="flex:1;background:transparent;border:none;outline:none;font-family:var(--font-sans);font-size:var(--text-sm);color:var(--ink);min-width:180px;text-align:center;" />
           <a href="login.html" style="font-family:var(--font-sans);font-size:var(--text-sm);font-weight:700;color:#fff;text-decoration:none;padding:0.55em 1.2em;background:#6366F1;border-radius:var(--radius-full);white-space:nowrap;transition:background 150ms;" onmouseover="this.style.background='#4F46E5'" onmouseout="this.style.background='#6366F1'">Start free →</a>
         </div>
-        <p class="anim-fade-up anim-delay-4" style="margin-top:var(--space-5);font-family:var(--font-sans);font-size:var(--text-sm);color:#4a7a9b;">
+        <p class="anim-fade-up anim-delay-4" style="margin-top:var(--space-5);font-family:var(--font-sans);font-size:var(--text-sm);color:var(--ink-tertiary);">
           Validated with CTOs at Coniq, Vip District, Signaturit, and Altima — no credit card required
         </p>
       </div>
