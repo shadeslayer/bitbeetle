@@ -87,8 +87,8 @@
       position: relative;
       flex-shrink: 0;
     }
-    .db-icon-nav .nav-icon-btn:hover { background: rgba(27,159,232,0.10); color: var(--text-primary); }
-    .db-icon-nav .nav-icon-btn.active { background: rgba(27,159,232,0.15); color: #1b9fe8; }
+    .db-icon-nav .nav-icon-btn:hover { background: var(--glow-soft); color: var(--text-primary); }
+    .db-icon-nav .nav-icon-btn.active { background: var(--glow-high); color: var(--accent); }
     .db-icon-nav .nav-spacer { flex: 1; }
     .nav-icon-icon {
       width: 36px; height: 36px;
@@ -133,10 +133,10 @@
       transition: background var(--duration-fast), color var(--duration-fast);
       position: relative;
     }
-    .sidebar-item:hover { background: rgba(27,159,232,0.07); color: var(--text-primary); }
+    .sidebar-item:hover { background: var(--glow-faint); color: var(--text-primary); }
     .sidebar-item.active {
-      background: rgba(27,159,232,0.12); color: #fff; font-weight: 600;
-      border-left: 3px solid #1b9fe8;
+      background: var(--glow-mid); color: #fff; font-weight: 600;
+      border-left: 3px solid var(--accent);
     }
     .sidebar-item .item-count {
       margin-left: auto;
@@ -166,7 +166,7 @@
       transition: background var(--duration-fast), color var(--duration-fast);
     }
     .conv-filter-tab:hover { background: var(--border-subtle); color: var(--text-primary); }
-    .conv-filter-tab.active { background: #1b9fe8; color: white; }
+    .conv-filter-tab.active { background: var(--accent); color: white; }
 
     .conv-card {
       padding: var(--space-3) var(--space-4);
@@ -175,10 +175,10 @@
       transition: background var(--duration-fast);
       position: relative;
     }
-    .conv-card:hover { background: rgba(27,159,232,0.06); }
+    .conv-card:hover { background: var(--glow-faint); }
     .conv-card.selected {
-      background: rgba(27,159,232,0.12);
-      border-left: 3px solid #1b9fe8;
+      background: var(--glow-mid);
+      border-left: 3px solid var(--accent);
     }
     .conv-card-top { display: flex; align-items: flex-start; gap: var(--space-3); }
     .conv-card-meta { flex: 1; min-width: 0; }
@@ -584,6 +584,15 @@
       </span>
       <span class="nav-icon-label" x-text="theme === 'dark' ? 'Light mode' : 'Dark mode'"></span>
     </button>
+    <!-- Accent colour picker -->
+    <div style="display:flex;align-items:center;justify-content:center;gap:6px;padding:6px 0;flex-shrink:0;" title="Accent colour">
+      <button @click="setAccent('indigo')"
+        :style="`width:15px;height:15px;border-radius:50%;background:#6366F1;border:2px solid ${accent==='indigo'?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.2)'};flex-shrink:0;transition:border-color 150ms;`"
+        style="padding:0;cursor:pointer;outline:none;" title="Indigo"></button>
+      <button @click="setAccent('emerald')"
+        :style="`width:15px;height:15px;border-radius:50%;background:#10B981;border:2px solid ${accent==='emerald'?'rgba(255,255,255,0.9)':'rgba(255,255,255,0.2)'};flex-shrink:0;transition:border-color 150ms;`"
+        style="padding:0;cursor:pointer;outline:none;" title="Emerald"></button>
+    </div>
     <a href="profile.html" style="display:flex;align-items:center;cursor:pointer;flex-shrink:0;border-radius:var(--radius-md);padding:2px 0;margin-top:var(--space-1);text-decoration:none;" :title="session?.name">
       <span class="nav-icon-icon">
         <div class="avatar avatar-sm" style="background:var(--accent);">
@@ -2000,6 +2009,7 @@ function dashboard() {
   return {
     session: null,
     theme: localStorage.getItem('bb_theme') || 'light',
+    accent: localStorage.getItem('bb_accent') || 'indigo',
     activeNav: 'inbox',
     conversations: MOCK_CONVERSATIONS,
     sidebarFilter: 'all',
@@ -2041,6 +2051,7 @@ function dashboard() {
       if (!bbGuard()) return;
       this.session = bbGetSession();
       document.documentElement.setAttribute('data-theme', this.theme);
+      document.documentElement.setAttribute('data-accent', this.accent);
       if (!localStorage.getItem('bb_onboarding_done')) {
         this.$nextTick(() => { this.showOnboarding = true; });
       }
@@ -2050,6 +2061,12 @@ function dashboard() {
       this.theme = this.theme === 'light' ? 'dark' : 'light';
       localStorage.setItem('bb_theme', this.theme);
       document.documentElement.setAttribute('data-theme', this.theme);
+    },
+
+    setAccent(name) {
+      this.accent = name;
+      localStorage.setItem('bb_accent', name);
+      document.documentElement.setAttribute('data-accent', name);
     },
 
     filteredConversations() {

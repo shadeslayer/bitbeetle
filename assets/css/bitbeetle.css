@@ -40,11 +40,17 @@
       --navy-border:    #1b3660;
       --navy-muted:     #264d80;
 
-      /* Cerulean accent (replaces purple in dark mode) */
+      /* Cerulean accent (default — overridden by data-accent) */
       --cerulean:       #1b9fe8;
       --cerulean-light: #5bc8f5;
       --cerulean-bright:#29abe2;
       --cerulean-glow:  rgba(27, 159, 232, 0.20);
+
+      /* Accent glow scale (default: cerulean) */
+      --glow-faint: rgba(27,159,232,0.06);
+      --glow-soft:  rgba(27,159,232,0.10);
+      --glow-mid:   rgba(27,159,232,0.12);
+      --glow-high:  rgba(27,159,232,0.15);
 
       /* Semantic */
       --success:        #1bb157;
@@ -120,7 +126,7 @@
       --border:       var(--ink-faint);
       --border-subtle: rgba(10,22,40,.08);
       --accent:       var(--cerulean);
-      --accent-hover: var(--blue-dark);
+      --accent-hover: var(--cerulean-bright);
 
       /* Extended palette tokens */
       --yellow:         #f6f431;
@@ -149,14 +155,56 @@
       --text-secondary: #8bb8d8;
       --text-muted:   #4a7a9b;
       --border:       var(--navy-border);    /* #1b3660 */
-      --border-subtle: rgba(27,159,232,.10);
-      --accent:       var(--cerulean);       /* #1b9fe8 */
-      --accent-hover: var(--cerulean-light); /* #5bc8f5 */
+      --border-subtle: var(--glow-soft);
+      --accent:       var(--cerulean);
+      --accent-hover: var(--cerulean-light);
       --shadow-xs:    0 1px 2px rgba(0,0,0,.4);
       --shadow-sm:    0 2px 8px rgba(0,0,0,.5);
       --shadow-md:    0 4px 16px rgba(0,0,0,.6);
       --shadow-lg:    0 8px 32px rgba(0,0,0,.7);
       --shadow-xl:    0 16px 48px rgba(6,15,30,.9);
+    }
+
+    /* ── ACCENT THEMES ─────────────────────────────────────────── */
+
+    /* Indigo Violet */
+    [data-accent="indigo"] {
+      --cerulean:        #6366F1;
+      --cerulean-light:  #818CF8;
+      --cerulean-bright: #4F46E5;
+      --cerulean-glow:   rgba(99,102,241,0.20);
+      --glow-faint:      rgba(99,102,241,0.06);
+      --glow-soft:       rgba(99,102,241,0.10);
+      --glow-mid:        rgba(99,102,241,0.12);
+      --glow-high:       rgba(99,102,241,0.15);
+    }
+    /* Indigo in dark mode — slightly brighter */
+    [data-theme="dark"][data-accent="indigo"] {
+      --cerulean: #818CF8;
+      --cerulean-light: #a5b4fc;
+      --cerulean-bright: #6366F1;
+    }
+
+    /* Emerald Green */
+    [data-accent="emerald"] {
+      --cerulean:        #059669;
+      --cerulean-light:  #10B981;
+      --cerulean-bright: #047857;
+      --cerulean-glow:   rgba(5,150,105,0.20);
+      --glow-faint:      rgba(5,150,105,0.06);
+      --glow-soft:       rgba(5,150,105,0.10);
+      --glow-mid:        rgba(5,150,105,0.12);
+      --glow-high:       rgba(5,150,105,0.15);
+    }
+    /* Emerald in dark mode — lighter/brighter for visibility */
+    [data-theme="dark"][data-accent="emerald"] {
+      --cerulean:        #10B981;
+      --cerulean-light:  #34D399;
+      --cerulean-bright: #059669;
+      --glow-faint:      rgba(16,185,129,0.06);
+      --glow-soft:       rgba(16,185,129,0.10);
+      --glow-mid:        rgba(16,185,129,0.12);
+      --glow-high:       rgba(16,185,129,0.15);
     }
 
     /* ── RESET ────────────────────────────────────────────────── */
@@ -407,16 +455,16 @@
       border-color: var(--ink);
     }
     [data-theme="dark"] .btn-primary {
-      background: var(--purple-bright);
-      border-color: var(--purple-bright);
+      background: var(--accent);
+      border-color: var(--accent);
     }
     .btn-primary:hover {
       background: var(--ink-secondary);
       box-shadow: var(--shadow-md);
     }
     [data-theme="dark"] .btn-primary:hover {
-      background: var(--purple-light);
-      box-shadow: 0 4px 20px var(--purple-glow);
+      background: var(--cerulean-light);
+      box-shadow: 0 4px 20px var(--cerulean-glow);
     }
 
     .btn-outline {
@@ -446,7 +494,7 @@
       box-shadow: 0 4px 20px rgba(0,12,225,0.25);
     }
     [data-theme="dark"] .btn-accent:hover {
-      box-shadow: 0 4px 20px var(--purple-glow);
+      box-shadow: 0 4px 20px var(--cerulean-glow);
     }
 
     /* Size variants */
@@ -517,7 +565,7 @@
       outline: 2px solid transparent;
     }
     [data-theme="dark"] .input:focus, [data-theme="dark"] .input:focus-visible {
-      box-shadow: 0 0 0 3px var(--purple-glow);
+      box-shadow: 0 0 0 3px var(--cerulean-glow);
     }
     .input:disabled { opacity: 0.5; cursor: not-allowed; }
 
@@ -549,7 +597,7 @@
       box-shadow: 0 0 0 3px rgba(0,12,225,0.12);
     }
     [data-theme="dark"] .input-hero-wrap:focus-within {
-      box-shadow: 0 0 0 3px var(--purple-glow);
+      box-shadow: 0 0 0 3px var(--cerulean-glow);
     }
 
     /* Textarea */
@@ -575,7 +623,7 @@
       outline: 2px solid transparent;
     }
     [data-theme="dark"] .textarea:focus, [data-theme="dark"] .textarea:focus-visible {
-      box-shadow: 0 0 0 3px var(--purple-glow);
+      box-shadow: 0 0 0 3px var(--cerulean-glow);
     }
 
     /* Select */
@@ -603,7 +651,7 @@
       outline: 2px solid transparent;
     }
     [data-theme="dark"] .select:focus, [data-theme="dark"] .select:focus-visible {
-      box-shadow: 0 0 0 3px var(--purple-glow);
+      box-shadow: 0 0 0 3px var(--cerulean-glow);
     }
     /* Dark-mode chevron — lighter fill for visibility on navy */
     [data-theme="dark"] .select {
@@ -1110,7 +1158,7 @@
       font-size: var(--text-xs); font-weight: 700; text-transform: uppercase;
       letter-spacing: 0.08em; color: var(--blue); margin-bottom: var(--space-1);
     }
-    [data-theme="dark"] .chat-ai-label { color: var(--purple-light); }
+    [data-theme="dark"] .chat-ai-label { color: var(--cerulean-light); }
     .chat-input-row {
       padding: var(--space-3) var(--space-4);
       border-top: 1px solid var(--border-subtle);
@@ -1158,8 +1206,8 @@
       box-shadow: 0 0 0 1px var(--accent), var(--shadow-lg);
     }
     [data-theme="dark"] .pricing-card.featured {
-      border-color: var(--purple);
-      box-shadow: 0 0 0 1px var(--purple), 0 8px 32px var(--purple-glow);
+      border-color: var(--cerulean);
+      box-shadow: 0 0 0 1px var(--cerulean), 0 8px 32px var(--cerulean-glow);
     }
     .pricing-tag {
       position: absolute;
