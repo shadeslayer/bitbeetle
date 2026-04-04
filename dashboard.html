@@ -385,10 +385,51 @@
       animation: chartFadeUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
     }
 
+    /* ── LIGHT THEME PANEL OVERRIDES ────────────────────────── */
+    [data-theme="light"] .db-icon-nav-inner {
+      background: var(--bg-elevated);
+      border-right: 1px solid var(--border);
+      box-shadow: 2px 0 8px rgba(0,0,0,0.06);
+    }
+    [data-theme="light"] .db-sidebar {
+      background: var(--bg-surface);
+      border-right: 1px solid var(--border);
+    }
+    [data-theme="light"] .db-sidebar-header { border-bottom: 1px solid var(--border); }
+    [data-theme="light"] .db-conv-list { background: var(--bg); }
+    [data-theme="light"] .db-conv-header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="light"] .conv-filter-tabs { border-bottom: 1px solid var(--border); }
+    [data-theme="light"] .conv-card { border-bottom: 1px solid var(--border-subtle); }
+    [data-theme="light"] .conv-group-label { border-bottom: 1px solid var(--border); }
+    [data-theme="light"] .db-thread { background: var(--bg-surface); }
+    [data-theme="light"] .db-thread-header {
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="light"] .db-compose {
+      background: var(--bg-elevated);
+      border-top: 1px solid var(--border);
+    }
+    [data-theme="light"] .compose-tabs { border-bottom: 1px solid var(--border); }
+    [data-theme="light"] .db-right {
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border);
+    }
+    [data-theme="light"] .db-right-tabs {
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="light"] .detail-section { border-top: 1px solid var(--border); }
+    /* Active sidebar item needs dark text on light cream bg */
+    [data-theme="light"] .sidebar-item.active { color: var(--text-primary); }
+
     /* Scrollbar styling */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--navy-border); border-radius: var(--radius-full); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
 
     /* ── DASHBOARD ENTRANCE ANIMATIONS ──────────────────── */
     .db-icon-nav-inner > a,
